@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 3))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 4))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -214,7 +214,8 @@ public static class Patcher
             using var dll = typeof(Patcher).Assembly.GetManifestResourceStream("SWGEmuLauncher.native.dinput8.dll") ?? throw new InvalidDataException("Travel extension payload is missing.");
             using var memory = new MemoryStream(); dll.CopyTo(memory); byte[] payload = memory.ToArray();
             string installed = Path.Combine(client, "dinput8.dll");
-            if (File.Exists(installed) && !File.ReadAllBytes(installed).SequenceEqual(payload))
+            if (File.Exists(installed) && !File.ReadAllBytes(installed).SequenceEqual(payload) &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "2A35DEA73AE37103FD2107486A5595457DD4C829650BC7F6E5DA757DFE2A7346")
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
