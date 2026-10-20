@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "version": "2026.10.19.1",
+  "minimumLauncherVersion": "1.0.0",
+  "patches": ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default"],
+  "notes": "Center of Being timed icon, zero crafting skill point costs, and waypoint monitor defaults."
+}

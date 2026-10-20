@@ -1,0 +1,57 @@
+# SWGEmu Private Launcher
+
+A simple Windows launcher for the Mr-Cee private SWGEmu server's client patches.
+
+## Play
+
+1. Download **SWGEmuLauncher-win-x64.zip** from [Releases](https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest).
+2. Extract the ZIP and open **SWGEmuLauncher.exe**.
+3. Browse to your existing game folder, containing `SWGEmu.exe` and `swgemu.cfg`.
+4. Close any running copy of the game, then select **Update & Play**.
+
+The download includes its runtime. No Python, separate .NET install, or administrator
+access is required for a game folder you can write to. This initial release is not
+code-signed, so Windows may show an unfamiliar-app warning.
+
+You need your own complete game installation. The launcher does not download game
+archives, create an account, or set the server's network address. Use the server
+owner's login configuration. Existing login settings and saved preferences are preserved.
+
+## Included patches
+
+- Free crafting professions: the client skill point costs match the private server.
+- Center of Being: adds its existing icon and server-provided duration to the buff display.
+- Waypoint monitor: enabled for fresh preferences; saved choices can override this default.
+
+The launcher downloads a small versioned manifest over HTTPS and applies supported
+patch recipes to each user's own game data. This repository and the download contain
+no original game assets, server source, server credentials, or player databases.
+
+Changed files are backed up under `private-launcher-backups` in the game folder.
+Updates prepare all patched data before writing, replace files atomically, and restore
+already-written files if an update fails. Existing loose skill/modifier table edits
+are preserved except for the specific entries intentionally changed by these patches.
+Running updates twice does not duplicate entries or reset login settings.
+
+If downloads are unavailable, the launcher clearly reports that it is using the
+last cached manifest or bundled patch instructions. That fallback may not be current.
+An unsupported patch or newer minimum version asks for a newer launcher release.
+The launcher never downloads or executes patch scripts. Updating the patch engine
+itself requires downloading a new launcher release using the provided link.
+
+## Build and maintain
+
+Build with the .NET 10 SDK on Windows:
+
+```powershell
+dotnet publish SWGEmuLauncher.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -o dist
+```
+
+`patches/manifest.json` is the public update feed. Supported recipes are compiled
+into the launcher. For an engine change, bump the launcher version, publish a new
+release, and update the manifest's `minimumLauncherVersion` when appropriate.
+Only include launcher code and non-secret patch recipes in this repository.
+
+Validation covers clean local archive extraction, byte comparison against existing
+patch tools, repeated updates, preserved login/preferences, malformed client handling,
+and the published online manifest. Live game login/display verification remains separate.
