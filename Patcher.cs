@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 5))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 6))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -219,17 +219,23 @@ public static class Patcher
         foreach (int parent in rows.Parents) BinaryPrimitives.WriteInt32BigEndian(output.AsSpan(parent + 4, 4), BE(data, parent + 4) + delta);
         _ = Table(output); return output;
     }
-    public static void Apply(string client, PatchManifest manifest, Action<string> log, string? accountName = null)
+    public static bool IsGameRunning(string client)
+    {
+        string path = Path.Combine(Path.GetFullPath(client), "SWGEmu.exe");
+        foreach (var process in System.Diagnostics.Process.GetProcessesByName("SWGEmu"))
+        {
+            try { if (string.Equals(process.MainModule?.FileName, path, StringComparison.OrdinalIgnoreCase)) return true; }
+            finally { process.Dispose(); }
+        }
+        return false;
+    }
+    public static void Apply(string client, PatchManifest manifest, Action<string> log, string? accountName = null, bool verifyOnly = false)
     {
         if (accountName is not null && !Regex.IsMatch(accountName, @"^[A-Za-z0-9_-]{0,64}$")) throw new InvalidDataException("Account names may contain letters, numbers, underscores and hyphens only.");
         client = Path.GetFullPath(client);
         if (!File.Exists(Path.Combine(client, "SWGEmu.exe")) || !File.Exists(Path.Combine(client, "swgemu.cfg"))) throw new InvalidDataException("Select the folder containing SWGEmu.exe and swgemu.cfg.");
         using var updateLock = new FileStream(Path.Combine(client, "private-launcher.update.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        foreach (var process in System.Diagnostics.Process.GetProcessesByName("SWGEmu"))
-        {
-            try { if (string.Equals(process.MainModule?.FileName, Path.Combine(client, "SWGEmu.exe"), StringComparison.OrdinalIgnoreCase)) throw new IOException("Close the game before updating."); }
-            finally { process.Dispose(); }
-        }
+        if (!verifyOnly && IsGameRunning(client)) throw new IOException("Close all game windows before installing updates.");
         var pending = new Dictionary<string, byte[]>();
         if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversations…"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
         if (manifest.Patches.Contains("map-double-click-travel"))
@@ -270,9 +276,22 @@ public static class Patcher
             configLines.Add(login);
             pending["private_launcher_account.cfg"] = Encoding.ASCII.GetBytes($"[ClientGame]\nloginClientID={accountName}\nloginClientPassword=\nautoConnectToLoginServer=false\n");
         }
+        const string instances = ".include \"private_launcher_instances.cfg\"";
+        configLines.RemoveAll(l => l.Trim() == instances);
+        if (manifest.Patches.Contains("multiple-instances"))
+        {
+            pending["private_launcher_instances.cfg"] = Encoding.ASCII.GetBytes("[SwgClient]\nallowMultipleInstances=true\n");
+            configLines.Add(instances);
+        }
         configLines.Add(icons); pending["swgemu.cfg"] = Encoding.ASCII.GetBytes(string.Join("\r\n", configLines) + "\r\n");
         // Prepare every result before touching the client; back up the complete change set.
         var changed = pending.Where(kv => !File.Exists(SafePath(client, kv.Key)) || !File.ReadAllBytes(SafePath(client, kv.Key)).SequenceEqual(kv.Value)).ToList();
+        if (verifyOnly)
+        {
+            if (changed.Count != 0) throw new IOException("A client update or login setting change is required. Close all game windows, then Update & Play.");
+            log($"Patch {manifest.Version} verified. Opening another game window is safe.");
+            return;
+        }
         string backup = Path.Combine(client, "private-launcher-backups", DateTime.Now.ToString("yyyyMMdd-HHmmss-fff"));
         foreach (var item in changed)
         {

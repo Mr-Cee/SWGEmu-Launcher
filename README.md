@@ -103,3 +103,12 @@ still required for map gestures and travel on the actual client.
 ## Mounted NPC conversations
 
 Client command permissions allow starting, replying to, and ending NPC conversations while riding vehicles or creature mounts. Requires matching server update. Normal distance, cell and line-of-sight rules and NPC-specific service requirements still apply.
+
+## Multiple game windows
+
+Select **Update & Play** again to open another game instance. The launcher enables
+`[SwgClient] allowMultipleInstances=true`. Each launch fetches the current manifest.
+With a game running, it checks that every patch and saved login setting already
+matches, without rewriting game files. If updates/settings differ, close all game
+windows first. Update client always requires closed clients. Server account limits
+still apply (this server permits four characters online per account).

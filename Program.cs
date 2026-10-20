@@ -59,7 +59,7 @@ public sealed class LauncherForm : Form
         LoadAccount(); folder.TextChanged += (_, _) => LoadAccount();
         browse.Click += (_, _) => { using var dialog = new FolderBrowserDialog { Description = "Choose the folder containing SWGEmu.exe", InitialDirectory = folder.Text }; if (dialog.ShowDialog() == DialogResult.OK) folder.Text = dialog.SelectedPath; };
         check.Click += async (_, _) => await Run(false, false); update.Click += async (_, _) => await Run(true, false); play.Click += async (_, _) => await Run(true, true);
-        Log("Ready. Choose your game folder, then select Update & Play.");
+        Log("Ready. Update & Play opens a new game window each time. Updates require all game windows closed.");
     }
     void Log(string text) { if (InvokeRequired) { BeginInvoke(() => Log(text)); return; } output.AppendText(text + Environment.NewLine); }
     async Task Run(bool apply, bool launch)
@@ -75,9 +75,9 @@ public sealed class LauncherForm : Form
             string client = folder.Text.Trim(); if (string.IsNullOrWhiteSpace(client)) throw new IOException("Choose the game folder first.");
             string name = remember.Checked ? account.Text.Trim() : "";
             if (remember.Checked && string.IsNullOrEmpty(name)) throw new IOException("Enter an account name, or uncheck Remember account name.");
-            await Task.Run(() => Patcher.Apply(client, manifest, Log, name));
+            await Task.Run(() => Patcher.Apply(client, manifest, Log, name, verifyOnly: launch && Patcher.IsGameRunning(client)));
             if (remember.Checked) File.WriteAllText(AccountFile, name); else if (File.Exists(AccountFile)) File.Delete(AccountFile); File.WriteAllText(Path.Combine(settings, "client-path.txt"), client);
-            if (launch) { Process.Start(new ProcessStartInfo(Path.Combine(client, "SWGEmu.exe")) { WorkingDirectory = client, UseShellExecute = true }); Log("Game started."); }
+            if (launch) { Process.Start(new ProcessStartInfo(Path.Combine(client, "SWGEmu.exe")) { WorkingDirectory = client, UseShellExecute = true }); Log("New game window started."); }
         }
         catch (Exception e) { Log("Could not complete: " + e.Message); MessageBox.Show(this, e.Message, "Launcher", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         finally { check.Enabled = update.Enabled = play.Enabled = true; folder.Enabled = remember.Enabled = account.Enabled = true; }
