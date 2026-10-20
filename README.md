@@ -116,3 +116,18 @@ still apply (this server permits four characters online per account).
 ## Area looting and harvesting
 
 `/lootArea` loots eligible corpses within 20 meters. `/harvestArea` harvests hide by default; `/harvestArea meat`, `/harvestArea bone`, and `/harvestArea hide` select the resource. Each successfully harvested corpse grants normal Scout experience. Requires the matching server update and restart. Normal ownership, group loot, harvesting skill, inventory and already-harvested rules apply.
+
+## Update the launcher in place
+
+From v1.0.8 onward, select **Update launcher** to download the latest stable
+release from this repository, verify its published SHA256 checksum and executable
+version, and replace the launcher at its current location. The launcher closes
+and reopens itself; the game can remain running. Saved game folder and account
+prefill settings are preserved. A `.previous` executable backup remains beside
+the launcher. Download, validation or replacement failures preserve the installed
+launcher; failure to reopen restores the backup. The install folder must be writable.
+
+**Check updates** reports available launcher updates as well as client patches.
+**Update client** still requires all game windows closed. Older launchers need
+one initial upgrade to v1.0.8 to gain the Update launcher button; future releases
+can then be installed entirely within the launcher.

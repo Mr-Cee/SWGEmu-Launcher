@@ -18,9 +18,9 @@ public static class Patcher
         var m = JsonSerializer.Deserialize<PatchManifest>(text, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
-            throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 7))
-            throw new InvalidDataException("Download the latest launcher before applying these patches.");
+            throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 8))
+            throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
     public static string BundledManifest()
