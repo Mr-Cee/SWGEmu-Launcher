@@ -3,3 +3,12 @@ obj/
 dist/
 *.user
 *.zip
+
+*.dll
+*.obj
+*.lib
+*.exp
+*.pdb
+*.log
+
+native/*.exe

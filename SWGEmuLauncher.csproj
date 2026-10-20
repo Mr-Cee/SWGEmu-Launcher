@@ -5,10 +5,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <AssemblyName>SWGEmuLauncher</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="patches/manifest.json" />
+    <EmbeddedResource Include="native/dinput8.dll" />
   </ItemGroup>
 </Project>

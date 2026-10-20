@@ -73,3 +73,29 @@ as the test path. Engine changes require a new launcher release.
 ## Galaxy-wide travel
 
 All public shuttleports and starports can travel directly between enabled planets when the matching server setting is enabled. Existing canonical route fares are preserved; previously unavailable planet pairs cost 1000 credits before city taxes. The client travel matrix is made symmetric to match the server. Private/closed destinations and city bans remain enforced.
+
+## Transportation-map double-click
+
+Double-click a destination icon on the normal transportation map to request paid,
+one-way travel without a ticket or collector. A single click still selects, and
+the normal purchase button still purchases tickets. Double-click always uses the
+one-way fare, even if the map's round-trip checkbox was selected.
+
+This uses our original 32-bit `dinput8.dll` extension. The launcher supports only
+client SHA256 `58012e57cebc499454812ba7ed96b1289db01e520963b4fc364edb41c322b2a8`.
+It refuses unsupported executables and does not overwrite another extension.
+The extension forwards normal DirectInput calls to Windows and checks native
+function signatures before enabling its map handler. Client executables are never
+modified or distributed. Its startup result is in `private_travel.log`; no account
+name, password or destination arguments are logged.
+
+Requires the matching server update and restart. Requests include an explicit
+prefix that older servers reject without charging a fare. The server rechecks
+terminal proximity, departure point, destination, route, city bans, player state,
+funds and fare. It charges cash first, then bank, with no travel coupon usage.
+
+Build the native payload first with `native/build.cmd` (Visual Studio C++ x86
+tools; adjust the toolchain path when needed), then publish the .NET launcher.
+`native/test.cmd` tests native event routing, request formatting, debounce and
+system-input forwarding without running the game. Full in-game validation is
+still required for map gestures and travel on the actual client.
