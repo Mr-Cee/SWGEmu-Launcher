@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 6))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 7))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -174,6 +174,57 @@ public static class Patcher
         if (p != rows.Offset + 8 + rows.Size || found.Count != 3) throw new InvalidDataException("Conversation command validation failed.");
         return result;
     }
+    public static byte[] AreaCommands(byte[] data)
+    {
+        var (columns, types, rows) = Table(data);
+        if (columns[0] != "commandName" || !types[0].StartsWith('s')) throw new InvalidDataException("Unexpected command table schema.");
+        int count = LE(data, rows.Offset + 8), p = rows.Offset + 12;
+        var entries = new List<byte[][]>();
+        var templates = new Dictionary<string, byte[][]>(StringComparer.OrdinalIgnoreCase);
+        var custom = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        for (int i = 0; i < count; i++)
+        {
+            var row = new byte[types.Count][];
+            for (int c = 0; c < types.Count; c++)
+            {
+                int start = p;
+                if (types[c].StartsWith('s')) _ = CString(data, ref p); else p += 4;
+                if (p > rows.Offset + 8 + rows.Size) throw new InvalidDataException("Truncated command row.");
+                row[c] = data[start..p];
+            }
+            string name = Encoding.UTF8.GetString(row[0]).TrimEnd('\0');
+            if (name.Equals("loot", StringComparison.OrdinalIgnoreCase) || name.Equals("harvestCorpse", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!templates.TryAdd(name, row)) throw new InvalidDataException("Duplicate command template.");
+            }
+            if (name.Equals("lootArea", StringComparison.OrdinalIgnoreCase) || name.Equals("harvestArea", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!custom.Add(name)) throw new InvalidDataException("Duplicate area command.");
+            }
+            else entries.Add(row);
+        }
+        if (p != rows.Offset + 8 + rows.Size || templates.Count != 2) throw new InvalidDataException("Command templates missing or invalid.");
+        foreach (var pair in new[] { ("lootArea", "loot"), ("harvestArea", "harvestCorpse") })
+        {
+            var row = templates[pair.Item2].Select(v => (byte[])v.Clone()).ToArray();
+            void Text(string col, string value) { int i = columns.IndexOf(col); if (i < 0 || !types[i].StartsWith('s')) throw new InvalidDataException("Missing string command column."); row[i] = Encoding.UTF8.GetBytes(value + "\0"); }
+            void Number(string col, int value) { int i = columns.IndexOf(col); if (i < 0 || types[i].StartsWith('s')) throw new InvalidDataException("Missing numeric command column."); row[i] = BitConverter.GetBytes(value); }
+            Text("commandName", pair.Item1);
+            foreach (string col in new[] { "scriptHook", "failScriptHook", "cppHook", "failCppHook", "tempScript", "characterAbility", "stringId" }) Text(col, "");
+            foreach (string col in new[] { "targetType", "maxRangeToTarget", "defaultTime", "defaultPriority", "disabled", "godLevel", "addToCombatQueue", "callOnTarget", "commandGroup" }) Number(col, 0);
+            entries.Add(row);
+        }
+        using var mem = new MemoryStream(); using var writer = new BinaryWriter(mem, Encoding.UTF8, true);
+        writer.Write(entries.Count); foreach (var row in entries) foreach (var cell in row) writer.Write(cell);
+        byte[] payload = mem.ToArray(); int delta = payload.Length - rows.Size;
+        byte[] output = new byte[data.Length + delta]; Array.Copy(data, output, rows.Offset + 4);
+        BinaryPrimitives.WriteInt32BigEndian(output.AsSpan(rows.Offset + 4, 4), payload.Length);
+        payload.CopyTo(output, rows.Offset + 8);
+        Array.Copy(data, rows.Offset + 8 + rows.Size, output, rows.Offset + 8 + payload.Length, data.Length - rows.Offset - 8 - rows.Size);
+        foreach (int parent in rows.Parents) BinaryPrimitives.WriteInt32BigEndian(output.AsSpan(parent + 4, 4), BE(data, parent + 4) + delta);
+        _ = Table(output); return output;
+    }
+
     public static byte[] TravelFares(byte[] data)
     {
         var (columns, types, rows) = Table(data);
@@ -238,6 +289,11 @@ public static class Patcher
         if (!verifyOnly && IsGameRunning(client)) throw new IOException("Close all game windows before installing updates.");
         var pending = new Dictionary<string, byte[]>();
         if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversations…"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
+        if (manifest.Patches.Contains("area-corpse-commands")) {
+            log("Preparing area loot and harvest commands…");
+            const string commandTable = "datatables/command/command_table.iff";
+            pending[commandTable] = AreaCommands(pending.TryGetValue(commandTable, out var table) ? table : Resource(client, commandTable));
+        }
         if (manifest.Patches.Contains("map-double-click-travel"))
         {
             string executableHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(client, "SWGEmu.exe"))));

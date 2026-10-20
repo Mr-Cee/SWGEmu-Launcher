@@ -112,3 +112,7 @@ With a game running, it checks that every patch and saved login setting already
 matches, without rewriting game files. If updates/settings differ, close all game
 windows first. Update client always requires closed clients. Server account limits
 still apply (this server permits four characters online per account).
+
+## Area looting and harvesting
+
+`/lootArea` loots eligible corpses within 20 meters. `/harvestArea` harvests hide by default; `/harvestArea meat`, `/harvestArea bone`, and `/harvestArea hide` select the resource. Each successfully harvested corpse grants normal Scout experience. Requires the matching server update and restart. Normal ownership, group loot, harvesting skill, inventory and already-harvested rules apply.
