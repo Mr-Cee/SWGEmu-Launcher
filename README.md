@@ -69,3 +69,7 @@ normal update backups may retain older account names. No account data is publish
 Client updates must be published first, then downloaded and applied through the
 released launcher for normal-player testing. Do not manually install client patches
 as the test path. Engine changes require a new launcher release.
+
+## Galaxy-wide travel
+
+All public shuttleports and starports can travel directly between enabled planets when the matching server setting is enabled. Existing canonical route fares are preserved; previously unavailable planet pairs cost 1000 credits before city taxes. The client travel matrix is made symmetric to match the server. Private/closed destinations and city bans remain enforced.

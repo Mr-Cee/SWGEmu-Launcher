@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 1))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 2))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -149,6 +149,28 @@ public static class Patcher
         if (p != rows.Offset + 8 + rows.Size || !artisan || matches < 180) throw new InvalidDataException("Skill table validation failed.");
         return result;
     }
+    public static byte[] TravelFares(byte[] data)
+    {
+        var (columns, types, rows) = Table(data);
+        if (columns.Count != 11 || columns[0] != "Planet" || types[0] != "s" || types.Skip(1).Any(t => t != "I")) throw new InvalidDataException("Unexpected travel table schema.");
+        int count = LE(data, rows.Offset + 8), p = rows.Offset + 12;
+        if (count != 10) throw new InvalidDataException("Unexpected travel planet count.");
+        var offsets = new int[count, count];
+        for (int i = 0; i < count; i++)
+        {
+            if (CString(data, ref p) != columns[i + 1]) throw new InvalidDataException("Unexpected travel planet order.");
+            for (int j = 0; j < count; j++) { offsets[i,j] = p; p += 4; }
+        }
+        if (p != rows.Offset + 8 + rows.Size) throw new InvalidDataException("Invalid travel rows.");
+        var result = (byte[])data.Clone();
+        for (int i = 0; i < count; i++) for (int j = i; j < count; j++)
+        {
+            int fare = LE(data, offsets[i,j]); if (fare <= 0) fare = 1000;
+            BinaryPrimitives.WriteInt32LittleEndian(result.AsSpan(offsets[i,j],4),fare);
+            BinaryPrimitives.WriteInt32LittleEndian(result.AsSpan(offsets[j,i],4),fare);
+        }
+        return result;
+    }
     public static byte[] BuffIcon(byte[] data)
     {
         var (columns, types, rows) = Table(data);
@@ -184,6 +206,7 @@ public static class Patcher
             finally { process.Dispose(); }
         }
         var pending = new Dictionary<string, byte[]>();
+        if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routes�"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
         if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skills…"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
         if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being icon…"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
         var lines = ConfigLines(client); int priority = 26;
