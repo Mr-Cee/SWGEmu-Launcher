@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 8))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 9))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -149,6 +149,29 @@ public static class Patcher
         if (p != rows.Offset + 8 + rows.Size || !artisan || matches < 180) throw new InvalidDataException("Skill table validation failed.");
         return result;
     }
+    public static byte[] ForceSensitiveCosts(byte[] data)
+    {
+        var (columns, types, rows) = Table(data);
+        if (columns[0] != "NAME" || columns[8] != "POINTS_REQUIRED" || types[8] != "i") throw new InvalidDataException("Unexpected skill table schema.");
+        string[] prefixes = ["force_sensitive_combat_prowess_", "force_sensitive_enhanced_reflexes_", "force_sensitive_crafting_mastery_", "force_sensitive_heightened_senses_"];
+        var matches = new int[prefixes.Length];
+        var result = (byte[])data.Clone(); int count = LE(data, rows.Offset + 8), p = rows.Offset + 12;
+        for (int i = 0; i < count; i++)
+        {
+            string name = ""; int cost = -1;
+            for (int column = 0; column < types.Count; column++) {
+                if (types[column].StartsWith('s')) { var value = CString(data, ref p); if (column == 0) name = value; }
+                else { if (column == 8) cost = p; p += 4; }
+            }
+            for (int tree = 0; tree < prefixes.Length; tree++) {
+                if (!name.StartsWith(prefixes[tree], StringComparison.Ordinal)) continue;
+                BinaryPrimitives.WriteInt32LittleEndian(result.AsSpan(cost, 4), 0); matches[tree]++; break;
+            }
+        }
+        if (p != rows.Offset + 8 + rows.Size || matches.Any(n => n < 16)) throw new InvalidDataException("Force Sensitive skill table validation failed.");
+        return result;
+    }
+
     public static byte[] MountedConversations(byte[] data)
     {
         var (columns, types, rows) = Table(data);
@@ -310,6 +333,11 @@ public static class Patcher
 
         if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routes…"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
         if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skillsâ€¦"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
+        if (manifest.Patches.Contains("free-force-sensitive-skills")) {
+            log("Preparing free Force Sensitive skill points…");
+            const string skills = "datatables/skill/skills.iff";
+            pending[skills] = ForceSensitiveCosts(pending.TryGetValue(skills, out var table) ? table : Resource(client, skills));
+        }
         if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being iconâ€¦"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
         var lines = ConfigLines(client); int priority = 26;
         foreach (var line in lines)

@@ -131,3 +131,7 @@ launcher; failure to reopen restores the backup. The install folder must be writ
 **Update client** still requires all game windows closed. Older launchers need
 one initial upgrade to v1.0.8 to gain the Update launcher button; future releases
 can then be installed entirely within the launcher.
+
+## Free Force Sensitive skill points
+
+Combat Prowess, Enhanced Reflexes, Crafting Mastery, and Heightened Senses boxes cost zero skill points. XP, village unlocks and prerequisites remain. Requires the matching server update and restart; existing character points recalculate on login. Use Update launcher, then Update client with game windows closed.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "2026.10.20.8",
-  "minimumLauncherVersion": "1.0.8",
+  "version": "2026.10.20.9",
+  "minimumLauncherVersion": "1.0.9",
   "patches": [
     "center-of-being-icon",
     "free-crafting-skills",
@@ -10,7 +10,8 @@
     "map-double-click-travel",
     "mounted-conversations",
     "multiple-instances",
-    "area-corpse-commands"
+    "area-corpse-commands",
+    "free-force-sensitive-skills"
   ],
-  "notes": "Center of Being timed icon, zero crafting skill point costs, waypoint monitor defaults, and direct galaxy-wide travel, and transportation-map double-click travel, and mounted NPC conversations, and multiple game instances. Adds /lootArea and /harvestArea [hide|bone|meat]; requires matching server update. Launcher updates can now be downloaded and installed in place with Update launcher."
+  "notes": "Center of Being timed icon, zero crafting skill point costs, waypoint monitor defaults, and direct galaxy-wide travel, and transportation-map double-click travel, and mounted NPC conversations, and multiple game instances. Adds /lootArea and /harvestArea [hide|bone|meat]; requires matching server update. Launcher updates can now be downloaded and installed in place with Update launcher. All four Force Sensitive trees cost zero skill points; XP and unlock requirements remain."
 }
