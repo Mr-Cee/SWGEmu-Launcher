@@ -33,8 +33,8 @@ already-written files if an update fails. Existing loose skill/modifier table ed
 are preserved except for the specific entries intentionally changed by these patches.
 Running updates twice does not duplicate entries or reset login settings.
 
-If downloads are unavailable, the launcher clearly reports that it is using the
-last cached manifest or bundled patch instructions. That fallback may not be current.
+The launcher requires a successful online manifest check before updating or playing.
+If that check or a required patch fails, the game is not started.
 An unsupported patch or newer minimum version asks for a newer launcher release.
 The launcher never downloads or executes patch scripts. Updating the patch engine
 itself requires downloading a new launcher release using the provided link.
@@ -55,3 +55,17 @@ Only include launcher code and non-secret patch recipes in this repository.
 Validation covers clean local archive extraction, byte comparison against existing
 patch tools, repeated updates, preserved login/preferences, malformed client handling,
 and the published online manifest. Live game login/display verification remains separate.
+
+## Remember account name
+
+Enter your account name in the launcher and check **Remember account name**, then
+select **Update client** or **Update & Play**. The next launch prefills the game's
+account field. Passwords are entered in the game; there is no password field in the
+launcher. Unchecking the option and updating clears its saved prefill. This remembers
+the launcher entry, not changes typed directly into the game's login screen.
+The name is saved locally per game folder, including in the client's prefill config;
+normal update backups may retain older account names. No account data is published.
+
+Client updates must be published first, then downloaded and applied through the
+released launcher for normal-player testing. Do not manually install client patches
+as the test path. Engine changes require a new launcher release.

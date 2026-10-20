@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 0))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 1))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -172,8 +172,9 @@ public static class Patcher
         foreach (int parent in rows.Parents) BinaryPrimitives.WriteInt32BigEndian(output.AsSpan(parent + 4, 4), BE(data, parent + 4) + delta);
         _ = Table(output); return output;
     }
-    public static void Apply(string client, PatchManifest manifest, Action<string> log)
+    public static void Apply(string client, PatchManifest manifest, Action<string> log, string? accountName = null)
     {
+        if (accountName is not null && !Regex.IsMatch(accountName, @"^[A-Za-z0-9_-]{0,64}$")) throw new InvalidDataException("Account names may contain letters, numbers, underscores and hyphens only.");
         client = Path.GetFullPath(client);
         if (!File.Exists(Path.Combine(client, "SWGEmu.exe")) || !File.Exists(Path.Combine(client, "swgemu.cfg"))) throw new InvalidDataException("Select the folder containing SWGEmu.exe and swgemu.cfg.");
         using var updateLock = new FileStream(Path.Combine(client, "private-launcher.update.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
@@ -198,6 +199,13 @@ public static class Patcher
         if (manifest.Patches.Contains("waypoint-monitor-default"))
         {
             pending["private_server_defaults.cfg"] = Encoding.ASCII.GetBytes("[ClientUserInterface]\nuseWaypointMonitor = true\n"); configLines.Insert(0, defaults);
+        }
+        if (accountName is not null)
+        {
+            const string login = ".include \"private_launcher_account.cfg\"";
+            configLines.RemoveAll(l => l.Trim() == login);
+            configLines.Add(login);
+            pending["private_launcher_account.cfg"] = Encoding.ASCII.GetBytes($"[ClientGame]\nloginClientID={accountName}\nloginClientPassword=\nautoConnectToLoginServer=false\n");
         }
         configLines.Add(icons); pending["swgemu.cfg"] = Encoding.ASCII.GetBytes(string.Join("\r\n", configLines) + "\r\n");
         // Prepare every result before touching the client; back up the complete change set.
@@ -227,6 +235,6 @@ public static class Patcher
             }
             throw;
         }
-        log($"Patch {manifest.Version} ready. {changed.Count} file(s) updated. Login settings preserved.");
+        log($"Patch {manifest.Version} ready. {changed.Count} file(s) updated. Server address preserved.");
     }
 }
