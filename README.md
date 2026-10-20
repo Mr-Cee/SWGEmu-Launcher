@@ -99,3 +99,7 @@ tools; adjust the toolchain path when needed), then publish the .NET launcher.
 `native/test.cmd` tests native event routing, request formatting, debounce and
 system-input forwarding without running the game. Full in-game validation is
 still required for map gestures and travel on the actual client.
+
+## Mounted NPC conversations
+
+Client command permissions allow starting, replying to, and ending NPC conversations while riding vehicles or creature mounts. Requires matching server update. Normal distance, cell and line-of-sight rules and NPC-specific service requirements still apply.

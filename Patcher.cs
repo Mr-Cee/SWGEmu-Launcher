@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Download the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 4))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 5))
             throw new InvalidDataException("Download the latest launcher before applying these patches.");
         return m;
     }
@@ -149,6 +149,31 @@ public static class Patcher
         if (p != rows.Offset + 8 + rows.Size || !artisan || matches < 180) throw new InvalidDataException("Skill table validation failed.");
         return result;
     }
+    public static byte[] MountedConversations(byte[] data)
+    {
+        var (columns, types, rows) = Table(data);
+        string[] names = ["npcconversationstart", "npcconversationselect", "npcconversationstop"];
+        string[] permissions = ["L:drivingVehicle", "L:ridingCreature", "S:ridingMount"];
+        var targets = permissions.Select(name => columns.FindIndex(c => c.Equals(name, StringComparison.OrdinalIgnoreCase))).ToArray();
+        if (targets.Any(i => i < 0) || !types[0].StartsWith('s')) throw new InvalidDataException("Unexpected conversation command schema.");
+        var result = (byte[])data.Clone(); int count = LE(data, rows.Offset + 8), p = rows.Offset + 12;
+        var found = new HashSet<string>();
+        for (int row = 0; row < count; row++)
+        {
+            string name = "";
+            for (int column = 0; column < types.Count; column++)
+            {
+                if (types[column].StartsWith('s')) { var value = CString(data, ref p); if (column == 0) name = value.ToLowerInvariant(); }
+                else {
+                    if (names.Contains(name) && targets.Contains(column)) BinaryPrimitives.WriteInt32LittleEndian(result.AsSpan(p, 4), 1);
+                    p += 4;
+                }
+            }
+            if (names.Contains(name)) found.Add(name);
+        }
+        if (p != rows.Offset + 8 + rows.Size || found.Count != 3) throw new InvalidDataException("Conversation command validation failed.");
+        return result;
+    }
     public static byte[] TravelFares(byte[] data)
     {
         var (columns, types, rows) = Table(data);
@@ -206,6 +231,7 @@ public static class Patcher
             finally { process.Dispose(); }
         }
         var pending = new Dictionary<string, byte[]>();
+        if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversations…"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
         if (manifest.Patches.Contains("map-double-click-travel"))
         {
             string executableHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(client, "SWGEmu.exe"))));
