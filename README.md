@@ -139,3 +139,7 @@ Combat Prowess, Enhanced Reflexes, Crafting Mastery, and Heightened Senses boxes
 ## Immediate mission acceptance
 
 Select a mission and click Accept to send the normal acceptance request without the extra confirmation prompt. The server still enforces mission limits, range, and eligibility. Mission cancellation and other confirmation dialogs retain their normal behavior. Update launcher, then Update client with the game closed. The extension checks the supported client signature before enabling this behavior.
+
+## Hired companion mount support
+
+Adds the existing player rider attachment to the two humanoid NPC appearances used by hired companions. The server companion feature controls hiring, professions, groups, and following. Existing appearance and gameplay data are preserved; no game assets are distributed. Update launcher, then Update client with the game closed. Requires the matching server update.

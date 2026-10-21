@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 10))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 11))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -128,6 +128,31 @@ public static class Patcher
         for (int i = 0; i < count; i++) types.Add(CString(data, ref p));
         return (columns, types, chunks.Single(c => c.Tag == "ROWS"));
     }
+    public static byte[] CompanionRider(byte[] data)
+    {
+        byte[] key = Encoding.ASCII.GetBytes("arrangementDescriptorFilename\0");
+        const string rider = "abstract/slot/arrangement/player.iff";
+        var fields = Chunks(data).Where(c => c.Tag == "XXXX" && data.AsSpan(c.Offset + 8, c.Size).StartsWith(key)).ToArray();
+        if (fields.Length != 1) throw new InvalidDataException("Unexpected companion appearance schema.");
+        var field = fields[0]; int value = field.Offset + 8 + key.Length, end = field.Offset + 8 + field.Size;
+        if (value >= end) throw new InvalidDataException("Missing companion attachment value.");
+        if (data[value] == 1) {
+            int pos = value + 1; string existing = CString(data, ref pos);
+            if (pos != end || existing != rider) throw new InvalidDataException("A custom companion attachment needs review before updating.");
+            return (byte[])data.Clone();
+        }
+        if (data[value] != 0 || value + 1 != end) throw new InvalidDataException("Unexpected companion attachment encoding.");
+        byte[] replacement = [.. key, 1, .. Encoding.ASCII.GetBytes(rider), 0];
+        int delta = replacement.Length - field.Size;
+        byte[] result = new byte[checked(data.Length + delta)];
+        data.AsSpan(0, field.Offset + 8).CopyTo(result);
+        replacement.CopyTo(result, field.Offset + 8);
+        data.AsSpan(end).CopyTo(result.AsSpan(field.Offset + 8 + replacement.Length));
+        BinaryPrimitives.WriteInt32BigEndian(result.AsSpan(field.Offset + 4, 4), replacement.Length);
+        foreach (int parent in field.Parents) BinaryPrimitives.WriteInt32BigEndian(result.AsSpan(parent + 4, 4), checked(BE(data, parent + 4) + delta));
+        _ = Chunks(result); return result;
+    }
+
     public static byte[] SkillCosts(byte[] data)
     {
         var (columns, types, rows) = Table(data);
@@ -311,6 +336,11 @@ public static class Patcher
         using var updateLock = new FileStream(Path.Combine(client, "private-launcher.update.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         if (!verifyOnly && IsGameRunning(client)) throw new IOException("Close all game windows before installing updates.");
         var pending = new Dictionary<string, byte[]>();
+        if (manifest.Patches.Contains("companion-rider-animations")) {
+            log("Preparing companion mount support…");
+            foreach (string resource in new[] { "object/mobile/shared_dressed_brawler_trainer_01.iff", "object/mobile/shared_dressed_doctor_trainer_human_female_01.iff" })
+                pending[resource] = CompanionRider(Resource(client, resource));
+        }
         if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversations…"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
         if (manifest.Patches.Contains("area-corpse-commands")) {
             log("Preparing area loot and harvest commands…");
