@@ -143,3 +143,7 @@ Select a mission and click Accept to send the normal acceptance request without 
 ## Hired companion mount support
 
 Adds the existing player rider attachment to the two humanoid NPC appearances used by hired companions. The server companion feature controls hiring, professions, groups, and following. Existing appearance and gameplay data are preserved; no game assets are distributed. Update launcher, then Update client with the game closed. Requires the matching server update.
+
+## Saved account login focus
+
+Version 1.0.12 focuses the in-game password field when a remembered account name is prefilled. Blank account names keep the account field focused. Use Update launcher, then Update client with the game closed. Passwords continue to be entered only in game.

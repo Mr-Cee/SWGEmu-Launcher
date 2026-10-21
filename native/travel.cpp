@@ -38,7 +38,41 @@ static bool InstallInstantMissionAccept(BYTE* base){
  if(memcmp(site+5,expected+5,6))return false;
  return Patch(site+5,skip,sizeof(skip));
 }
-static BOOL CALLBACK Initialize(PINIT_ONCE,PVOID,PVOID*){wchar_t path[MAX_PATH];UINT n=GetSystemDirectoryW(path,MAX_PATH);if(!n||n+13>=MAX_PATH)return TRUE;wcscat_s(path,L"\\dinput8.dll");systemInput=LoadLibraryW(path);image=(BYTE*)GetModuleHandleW(nullptr);auto dos=(IMAGE_DOS_HEADER*)image;if(dos->e_magic!=IMAGE_DOS_SIGNATURE)return TRUE;auto nt=(IMAGE_NT_HEADERS32*)(image+dos->e_lfanew);const BYTE msg[]={0x55,0x8b,0xec,0x8b,0x45,0x08},button[]={0x55,0x8b,0xec,0x6a,0xff},call[]={0xe8,0xa0,0x9a,0x6e,0xff};if(nt->FileHeader.Machine!=IMAGE_FILE_MACHINE_I386||nt->OptionalHeader.SizeOfImage!=0x15bf000||memcmp(image+msgRva,msg,6)||memcmp(image+buttonRva,button,5)||memcmp(image+callRva,call,5)){Log("Unsupported client signatures. Travel extension disabled; normal input preserved.");return TRUE;}BYTE* t=(BYTE*)VirtualAlloc(nullptr,16,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);if(!t)return TRUE;memcpy(t,msg,6);t[6]=0xe9;*(int32_t*)(t+7)=(int32_t)((image+msgRva+6)-(t+11));DWORD old;if(!VirtualProtect(t,16,PAGE_EXECUTE_READ,&old)){VirtualFree(t,0,MEM_RELEASE);return TRUE;}trampoline=t;nativeButton=(Button)(image+buttonRva);nativeQueue=(Queue)(image+queueRva);nativeClose=(void(__thiscall*)(void*))(image+closeRva);BYTE c[5]={0xe8};*(int32_t*)(c+1)=(int32_t)((BYTE*)&QueueHook-(image+callRva+5));BYTE j[6]={0xe9,0,0,0,0,0x90};*(int32_t*)(j+1)=(int32_t)((BYTE*)&MessageHook-(image+msgRva+5));if(!Patch(image+callRva,c,5))return TRUE;if(!Patch(image+msgRva,j,6)){Patch(image+callRva,call,5);return TRUE;}if(InstallInstantMissionAccept(image))Log("Mission accept confirmation disabled; normal server validation retained.");else Log("Mission accept signature unsupported; native confirmation retained.");Log("Private travel extension 1.2: map double-click installed. Server validates the one-way fare.");return TRUE;}
+// Login activation normally focuses username even when ConfigClientGame already filled it.
+constexpr uintptr_t loginFocusRva=0x88d291,loginAccountRva=0x102e30,loginSetFocusRva=0xd06be0;
+using LoginAccount=const char*(__cdecl*)();
+using LoginFocus=void(__thiscall*)(void*);
+static LoginAccount nativeLoginAccount;
+static LoginFocus nativeLoginFocus;
+static void __cdecl FocusLogin(void* self){
+ if(!Readable(self,0xa8)||!nativeLoginAccount||!nativeLoginFocus)return;
+ const char* name=nativeLoginAccount();
+ bool saved=Readable(name,1)&&*name!='\0';
+ void* control=*(void**)((BYTE*)self+(saved?0xa4:0xa0));
+ if(Readable(control,sizeof(void*)))nativeLoginFocus(control);
+}
+// ESI is the login mediator at this exact, signature-checked call site.
+static __declspec(naked) void LoginFocusHook(){__asm{
+ push esi
+ call FocusLogin
+ add esp,4
+ ret
+ }}
+static bool InstallLoginPasswordFocus(BYTE* base){
+ const BYTE expected[]={0x8b,0x8e,0xa0,0,0,0,0xe8,0x44,0x99,0x47,0};
+ const BYTE account[]={0xa1,0xec,0x11,0x91,0x01,0xc3};
+ const BYTE focus[]={0x56,0x8b,0xf1,0x8b,0x06,0xff,0x90,0xa4,0,0,0};
+ BYTE* site=base+loginFocusRva;
+ if(!Readable(site,sizeof(expected))||!Readable(base+loginAccountRva,sizeof(account))||!Readable(base+loginSetFocusRva,sizeof(focus))||
+    memcmp(site,expected,6)||memcmp(base+loginAccountRva,account,sizeof(account))||memcmp(base+loginSetFocusRva,focus,sizeof(focus)))return false;
+ BYTE call[5]={0xe8};*(int32_t*)(call+1)=(int32_t)((BYTE*)&LoginFocusHook-(site+11));
+ if(!memcmp(site+6,call,sizeof(call)))return true;
+ if(memcmp(site+6,expected+6,5))return false;
+ nativeLoginAccount=(LoginAccount)(base+loginAccountRva);
+ nativeLoginFocus=(LoginFocus)(base+loginSetFocusRva);
+ return Patch(site+6,call,sizeof(call));
+}
+static BOOL CALLBACK Initialize(PINIT_ONCE,PVOID,PVOID*){wchar_t path[MAX_PATH];UINT n=GetSystemDirectoryW(path,MAX_PATH);if(!n||n+13>=MAX_PATH)return TRUE;wcscat_s(path,L"\\dinput8.dll");systemInput=LoadLibraryW(path);image=(BYTE*)GetModuleHandleW(nullptr);auto dos=(IMAGE_DOS_HEADER*)image;if(dos->e_magic!=IMAGE_DOS_SIGNATURE)return TRUE;auto nt=(IMAGE_NT_HEADERS32*)(image+dos->e_lfanew);const BYTE msg[]={0x55,0x8b,0xec,0x8b,0x45,0x08},button[]={0x55,0x8b,0xec,0x6a,0xff},call[]={0xe8,0xa0,0x9a,0x6e,0xff};if(nt->FileHeader.Machine!=IMAGE_FILE_MACHINE_I386||nt->OptionalHeader.SizeOfImage!=0x15bf000||memcmp(image+msgRva,msg,6)||memcmp(image+buttonRva,button,5)||memcmp(image+callRva,call,5)){Log("Unsupported client signatures. Travel extension disabled; normal input preserved.");return TRUE;}BYTE* t=(BYTE*)VirtualAlloc(nullptr,16,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);if(!t)return TRUE;memcpy(t,msg,6);t[6]=0xe9;*(int32_t*)(t+7)=(int32_t)((image+msgRva+6)-(t+11));DWORD old;if(!VirtualProtect(t,16,PAGE_EXECUTE_READ,&old)){VirtualFree(t,0,MEM_RELEASE);return TRUE;}trampoline=t;nativeButton=(Button)(image+buttonRva);nativeQueue=(Queue)(image+queueRva);nativeClose=(void(__thiscall*)(void*))(image+closeRva);BYTE c[5]={0xe8};*(int32_t*)(c+1)=(int32_t)((BYTE*)&QueueHook-(image+callRva+5));BYTE j[6]={0xe9,0,0,0,0,0x90};*(int32_t*)(j+1)=(int32_t)((BYTE*)&MessageHook-(image+msgRva+5));if(!Patch(image+callRva,c,5))return TRUE;if(!Patch(image+msgRva,j,6)){Patch(image+callRva,call,5);return TRUE;}if(InstallInstantMissionAccept(image))Log("Mission accept confirmation disabled; normal server validation retained.");else Log("Mission accept signature unsupported; native confirmation retained.");if(InstallLoginPasswordFocus(image))Log("Login focus: password for a saved account, username otherwise.");else Log("Login focus signatures unsupported; native focus retained.");Log("Private travel extension 1.3: map double-click installed. Server validates the one-way fare.");return TRUE;}
 static FARPROC Proc(const char* n){InitOnceExecuteOnce(&once,Initialize,nullptr,nullptr);return systemInput?GetProcAddress(systemInput,n):nullptr;}
 extern "C" HRESULT WINAPI DirectInput8Create(HINSTANCE h,DWORD v,REFIID i,LPVOID* o,LPUNKNOWN u){auto p=Proc("DirectInput8Create");return p?((HRESULT(WINAPI*)(HINSTANCE,DWORD,REFIID,LPVOID*,LPUNKNOWN))p)(h,v,i,o,u):E_FAIL;}
 extern "C" HRESULT WINAPI DllCanUnloadNow(){auto p=Proc("DllCanUnloadNow");return p?((HRESULT(WINAPI*)())p)():S_FALSE;}

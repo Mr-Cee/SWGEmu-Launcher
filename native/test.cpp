@@ -6,6 +6,9 @@ static uint32_t __cdecl FakeQueue(uint32_t,const void*,const NativeWide* text,in
 static void __fastcall FakeButton(void* self,void*,void* context){if(context==*(void**)((BYTE*)self+0xa8)){std::wstring s=L"naboo Theed naboo Keren 1";NativeWide n{s.data(),s.data()+s.size(),s.data()+s.size()+1};QueueHook(1,nullptr,&n,0,0);}}
 static void __fastcall FakeClose(void*,void*){closed++;}
 static bool __fastcall FakeMessage(void*,void*,void*,const void*){forwarded++;return true;}
+static const char* testAccount="";static void* focusedControl;
+static const char* __cdecl FakeAccount(){return testAccount;}
+static void __fastcall FakeFocus(void* self,void*){focusedControl=self;}
 int main(){
  nativeQueue=FakeQueue;nativeButton=(Button)FakeButton;nativeClose=(void(__thiscall*)(void*))FakeClose;trampoline=(void*)FakeMessage;
  BYTE self[0x200]{};int destination,purchase;void* elements[]={&destination};void* vector[]={elements,elements+1,elements+1};*(void***)(self+0xe0)=vector;*(void**)(self+0xa8)=&purchase;
@@ -28,6 +31,26 @@ int main(){
  assert(!InstallInstantMissionAccept(fake)&&!memcmp(before,fake+missionConfirmRva,sizeof(before)));
  VirtualFree(fake,0,MEM_RELEASE);
  std::cout<<"PASS: mission accept skips only its confirmation branch, preserves adjacent instructions, is idempotent, and rejects mismatched signatures.\n";
+ BYTE login[0xb0]{};int username=0,password=0;
+ *(void**)(login+0xa0)=&username;*(void**)(login+0xa4)=&password;
+ nativeLoginAccount=FakeAccount;nativeLoginFocus=(LoginFocus)FakeFocus;
+ testAccount="";FocusLogin(login);assert(focusedControl==&username);
+ testAccount="saved-account";FocusLogin(login);assert(focusedControl==&password);
+ testAccount=nullptr;FocusLogin(login);assert(focusedControl==&username);
+ focusedControl=nullptr;FocusLogin(nullptr);assert(focusedControl==nullptr);
+ BYTE* loginImage=(BYTE*)VirtualAlloc(nullptr,loginSetFocusRva+32,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(loginImage);
+ const BYTE loginSite[]={0x8b,0x8e,0xa0,0,0,0,0xe8,0x44,0x99,0x47,0};
+ const BYTE getter[]={0xa1,0xec,0x11,0x91,0x01,0xc3};
+ const BYTE setter[]={0x56,0x8b,0xf1,0x8b,0x06,0xff,0x90,0xa4,0,0,0};
+ memcpy(loginImage+loginFocusRva,loginSite,sizeof(loginSite));
+ memcpy(loginImage+loginAccountRva,getter,sizeof(getter));memcpy(loginImage+loginSetFocusRva,setter,sizeof(setter));
+ assert(InstallLoginPasswordFocus(loginImage));assert(!memcmp(loginImage+loginFocusRva,loginSite,6));
+ assert(loginImage[loginFocusRva+11]==0);assert(InstallLoginPasswordFocus(loginImage));
+ memcpy(loginImage+loginFocusRva,loginSite,sizeof(loginSite));loginImage[loginFocusRva+7]^=1;
+ BYTE loginBefore[sizeof(loginSite)];memcpy(loginBefore,loginImage+loginFocusRva,sizeof(loginBefore));
+ assert(!InstallLoginPasswordFocus(loginImage));assert(!memcmp(loginBefore,loginImage+loginFocusRva,sizeof(loginBefore)));
+ VirtualFree(loginImage,0,MEM_RELEASE);
+ std::cout<<"PASS: saved-account password focus, blank-account username focus, missing-pointer safety, exact patch bounds, repeat install and signature rejection.\n";
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";
 }

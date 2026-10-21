@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 11))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 12))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -357,7 +357,8 @@ public static class Patcher
             string installed = Path.Combine(client, "dinput8.dll");
             if (File.Exists(installed) && !File.ReadAllBytes(installed).SequenceEqual(payload) &&
                 (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "2A35DEA73AE37103FD2107486A5595457DD4C829650BC7F6E5DA757DFE2A7346" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "DFDE4DF7AA9D10FA75FC13990D47DFC3F0ADB97B26216381BBC2222CE6CB4F83"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "DFDE4DF7AA9D10FA75FC13990D47DFC3F0ADB97B26216381BBC2222CE6CB4F83" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "9C59052F9BCD3FCC3F20802029BE9756596DD6907A1060F840F5C64A939FCE23"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
