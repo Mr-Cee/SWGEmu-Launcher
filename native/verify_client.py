@@ -5,6 +5,6 @@ assert hashlib.sha256(data).hexdigest() == "58012e57cebc499454812ba7ed96b1289db0
 pe=struct.unpack_from('<I',data,60)[0];assert struct.unpack_from('<H',data,pe+4)[0]==0x14c
 assert struct.unpack_from('<I',data,pe+24+56)[0]==0x15bf000
 # This client uses equal file and section RVAs for the executable code section.
-for offset,expected in [(0x985060,'558bec8b4508'),(0x9848d0,'558bec6aff'),(0x984b4b,'e8a09a6eff')]:
+for offset,expected in [(0x985060,'558bec8b4508'),(0x9848d0,'558bec6aff'),(0x984b4b,'e8a09a6eff'),(0x5797c1,'8a450c84c00f84e6000000e8ffb9aaff')]:
  assert data[offset:offset+len(bytes.fromhex(expected))]==bytes.fromhex(expected)
 print('PASS: exact supported executable hash, PE architecture/image size, and all native hook signatures.')

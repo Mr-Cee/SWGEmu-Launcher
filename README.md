@@ -135,3 +135,7 @@ can then be installed entirely within the launcher.
 ## Free Force Sensitive skill points
 
 Combat Prowess, Enhanced Reflexes, Crafting Mastery, and Heightened Senses boxes cost zero skill points. XP, village unlocks and prerequisites remain. Requires the matching server update and restart; existing character points recalculate on login. Use Update launcher, then Update client with game windows closed.
+
+## Immediate mission acceptance
+
+Select a mission and click Accept to send the normal acceptance request without the extra confirmation prompt. The server still enforces mission limits, range, and eligibility. Mission cancellation and other confirmation dialogs retain their normal behavior. Update launcher, then Update client with the game closed. The extension checks the supported client signature before enabling this behavior.

@@ -32,3 +32,5 @@ The launcher refuses unknown executable hashes and refuses to overwrite a differ
 input proxy. Runtime status is appended to private_travel.log without account data
 or command arguments. Full gesture and travel testing still requires the real game
 with the updated server running; automated tests do not establish live UI success.
+
+Version 1.2 also skips the false-confirmed branch inside the native mission accept handler at RVA 0x5797c1. It verifies the argument test, conditional branch, and following native call before replacing the six-byte branch with no-ops in process memory. The normal confirmed path sends the usual mission request. Mission removal, other dialogs and the executable on disk are unchanged. Tests cover exact mutation bounds, repeat installation and signature mismatch rejection.
