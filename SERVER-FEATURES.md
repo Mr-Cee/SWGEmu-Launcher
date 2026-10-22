@@ -43,11 +43,7 @@ launcher and its client updates.
 - **Intimidation reduces defense ratings and outgoing weapon damage by 25%.**
   It no longer completely disables secondary defenses.
 - **Player running is 25% faster.**
-- **Vehicles use a 2x run-speed multiplier.** Swoops are configured for **85 m/s**,
-  **5x their original speed**, accounting for that multiplier. After the server
-  restarts with this setting, store/recall existing swoops to refresh their speed.
-  Mounting now explicitly synchronizes both the vehicle and rider's movement speed
-  with the client, correcting the missing vehicle update. No client patch is needed.
+- **Swoops are configured for 25.5 m/s**, **1.5x their original 17 m/s server speed**, accounting for the existing 2x vehicle multiplier. Their separate client hover-physics speed limit is now synchronized too; server run-speed updates alone did not change it. After the server restart, store/recall and remount existing swoops. Paint, acceleration, other vehicles and on-foot movement are unchanged. No client patch is needed.
 - **NPC conversations work while mounted** on vehicles or creature mounts,
   subject to normal range and line-of-sight rules and each NPC's service rules.
 - A shared **Galaxy chat channel** automatically joins players across planets.
