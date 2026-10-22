@@ -91,6 +91,7 @@ launcher and its client updates.
   Remove existing matching buff icons first when requesting a complete fresh set.
 - The Event NPC can **clear wounds, battle fatigue, damage-over-time effects, and
   combat debuffs**, while preserving beneficial Doctor/Entertainer buffs.
+- **Free Novice Freelance Pilot + starter Scyk Light Fighter**, through the Event NPC conversation or radial menu. One starter package per character, with a fitted ship delivered directly to the datapad. Existing Scyks are recognized to avoid duplicates; native ship/datapad capacity and pilot-profession restrictions apply. Existing Freelance pilots keep their progress. Requires the server restart; no client update.
 - **Purchase Master Politician for 500,000 credits and zero skill points**, through
   the Event NPC's conversation or radial menu. Includes all **18 skill boxes** and
   prerequisites, without an XP requirement. Payment uses cash first, then bank;
