@@ -124,9 +124,13 @@ launcher and its client updates.
   without purchasing a physical ticket or using a collector.
 - Ordinary ticket travel remains available. Travel uses the **normal map**, without
   the replacement destination-list popup.
-- **Personal ship travel between starports is free** through starship terminals when
-  carrying an eligible ship deed or owning an appropriate ship control device.
-  Ship ownership and normal player-state/travel checks apply.
+- **Personal ship travel is free to all ticket-permitted destinations**, including
+  starports, shuttleports, Aurilia, and eligible player-city stops, from starship
+  terminals. Map double-click accepts an eligible carried ship deed or datapad
+  ship; the native ship Travel action retains pilot certification/reactor/engine
+  requirements. Both use the normal route, incoming, state, and city-ban checks.
+- Ship travel has **no fixed post-boot delay**. The world and destination services
+  must finish loading; initialization messages now explain temporary unavailability.
 - **Owned stored starships follow you to other starports.** Opening a starship
   terminal retrieves your landed datapad ships to that port, including after
   ticket travel. No retrieval fee applies. Parking and landing-return information
