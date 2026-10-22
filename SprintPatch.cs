@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Text;
+using System.Text.RegularExpressions;
 namespace PrivateSwgLauncher;
 public static partial class Patcher
 {
@@ -57,8 +58,28 @@ public static partial class Patcher
         Text("commandName", "sprint"); Text("characterAbility", "sprint");
         foreach(var col in new[]{"scriptHook","failScriptHook","cppHook","failCppHook","tempScript","stringId"})Text(col, "");
         foreach(var col in new[]{"defaultTime","defaultPriority","targetType","maxRangeToTarget","godLevel","addToCombatQueue","callOnTarget","disabled"})Number(col, 0);
-        Number("visible",1); rows.Add(entry);
+        // 2 = visible only when learned; 3 would expose it to everyone.
+        Number("visible",2);
+        int group=columns.IndexOf("commandGroup");
+        var combat=rows.Single(row=>SprintText(row[0]).Equals("intimidate1",StringComparison.OrdinalIgnoreCase));
+        if(group<0||types[group].StartsWith('s'))throw new InvalidDataException("Missing combat command group.");
+        entry[group]=(byte[])combat[group].Clone(); rows.Add(entry);
     });
+    public static byte[] SprintIcons(byte[] data)
+    {
+        // The command browser/toolbar resolves /styles.icon.command.<ability>.
+        // Copy Burst Run's image definitions within their original style branches.
+        var utf8=new UTF8Encoding(false,true);string text=utf8.GetString(data);
+        string Pattern(string name) => @"<ImageStyle\b(?=[^>]*\bName\s*=\s*['""]" + name + @"['""])[^>]*/>";
+        var source=new Regex(Pattern("burstRun"),RegexOptions.IgnoreCase|RegexOptions.CultureInvariant);
+        var existing=new Regex(Pattern("sprint"),RegexOptions.IgnoreCase|RegexOptions.CultureInvariant);
+        int sources=source.Matches(text).Count,installed=existing.Matches(text).Count;
+        if(sources<1||sources>8||(installed!=0&&installed!=sources))throw new InvalidDataException("Unexpected running icon definitions.");
+        // Remove only recipe-owned definitions before regenerating them in place.
+        text=existing.Replace(text,"");
+        text=source.Replace(text,m=>m.Value+Regex.Replace(m.Value,@"(\bName\s*=\s*['""])burstRun(['""])","${1}sprint${2}",RegexOptions.IgnoreCase|RegexOptions.CultureInvariant));
+        return utf8.GetBytes(text);
+    }
     public static byte[] SprintModifiers(byte[] data) => SprintTable(data, (columns, types, rows) => {
         if (!columns.SequenceEqual(new[]{"ModifierName","DisplayName","DisplayDescription","IconImageStyle"}) || types.Any(t=>t!="s")) throw new InvalidDataException("Unexpected modifier schema.");
         if(rows.Count(row=>SprintText(row[0])=="sprint")>1)throw new InvalidDataException("Duplicate Sprint modifier.");

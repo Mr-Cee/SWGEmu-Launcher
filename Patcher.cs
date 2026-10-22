@@ -19,7 +19,7 @@ public static partial class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 15))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 16))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -378,6 +378,7 @@ public static partial class Patcher
             byte[] Current(string path) => pending.TryGetValue(path, out var value) ? value : Resource(client,path);
             const string skills="datatables/skill/skills.iff", commands="datatables/command/command_table.iff", modifiers="datatables/modifiers/modifiers.iff";
             pending[skills]=SprintSkills(Current(skills)); pending[commands]=SprintCommands(Current(commands)); pending[modifiers]=SprintModifiers(Current(modifiers));
+            pending["ui/ui_styles.inc"]=SprintIcons(Current("ui/ui_styles.inc"));
             pending["string/en/cmd_n.stf"]=SprintStrings(Current("string/en/cmd_n.stf"),"Sprint");
             pending["string/en/cmd_d.stf"]=SprintStrings(Current("string/en/cmd_d.stf"),"Run 30% faster on foot for 30 seconds. Cooldown: 60 seconds from activation. Granted by combat master skill boxes. Mounting ends Sprint.");
         }
