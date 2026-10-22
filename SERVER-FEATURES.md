@@ -308,7 +308,12 @@ launcher and its client updates.
   mission acceptance, and companion rider attachments.
 - Existing login/preferences are preserved; changed client files are backed up.
   Updates check the supported client and prepare replacements before installing them.
-- Server startup support was corrected for the post-reboot runtime-directory issue.
+- The owner's server launcher keeps startup, **`restart`**, and **`shutdown`** in
+  **one console window**. Both commands save cleanly with a one-minute warning;
+  `restart 0` / `shutdown 0` skip the warning. Restart waits for confirmed shutdown
+  and process exit; crashes or incomplete shutdowns do not start another server.
+- Server startup refreshes the local network/login address and avoids the former
+  screen runtime-directory issue by using the foreground console controller.
 
 ## Additional custom content
 
