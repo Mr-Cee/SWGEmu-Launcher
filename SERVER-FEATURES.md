@@ -1,6 +1,6 @@
 # Server features and changes
 
-Updated October 21, 2026.
+Updated October 22, 2026.
 
 A player-friendly overview of the customizations implemented for this private
 SWGEmu server. Values below describe the current configured rules. Newer server
@@ -93,6 +93,22 @@ launcher and its client updates.
 - Cantina doctors also offer free removal of those buffs and **2,500-credit
   wound/battle-fatigue healing**. No healing charge applies when there are no
   applicable injuries; stronger matching buffs are protected from replacement.
+
+### Master Smuggler slicing service
+
+- **Renn Talon (Master Slicer)** serves Endor's Smuggler Outpost near **-950, 1558**.
+- Use his conversation or radial menu, choose an unequipped item in your main
+  inventory, then choose a stat and press **Slice item**.
+- **100,000 credits per completed slice**, paid from cash first, then bank.
+  The original item stays in your inventory throughout; cancellation is free.
+- Weapons offer **damage +20–35%** or **attack-delay reduction 20–35%**.
+- Armor offers **effectiveness +11–35%** or **encumbrance reduction 20–45%**.
+- Results roll within the native **Master Smuggler ranges**. The service completes
+  the slice; the maximum roll is possible but is not guaranteed.
+- One slice per item. Already-sliced, broken, and unsliceable items are ineligible.
+  Native armor resistance rules/caps apply. Weapon powerups are removed on success,
+  as with normal slicing; this is stated before payment.
+- The NPC supplies the tools. Players need no Smuggler skills or slicing kits.
 
 ## Travel and Aurilia
 
