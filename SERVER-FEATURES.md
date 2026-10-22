@@ -43,8 +43,9 @@ launcher and its client updates.
 - **Intimidation reduces defense ratings and outgoing weapon damage by 25%.**
   It no longer completely disables secondary defenses.
 - **Player running is 25% faster.**
-- **Vehicles use a 2x run-speed multiplier.** Swoops also received an additional
-  doubling of their base run speed. Existing swoops refresh when stored/recalled.
+- **Vehicles use a 2x run-speed multiplier.** Swoops are configured for **85 m/s**,
+  **5x their original speed**, accounting for that multiplier. After the server
+  restarts with this setting, store/recall existing swoops to refresh their speed.
 - **NPC conversations work while mounted** on vehicles or creature mounts,
   subject to normal range and line-of-sight rules and each NPC's service rules.
 - A shared **Galaxy chat channel** automatically joins players across planets.
