@@ -351,3 +351,9 @@ launcher and its client updates.
 - Saved furnishings persist with the packed deed and are restored automatically. The original owner must place the deed; a recovery option appears if furnishings still await restoration.
 - Vendors must be removed first, and installation hoppers/schematics must be emptied. City halls, faction bases/defenses and temporary structures are excluded. Residence, city membership and access permissions use normal new-placement rules.
 - Server restart required; this option needs no additional client patch.
+
+## Spynet operatives
+
+- Any bounty Spynet operative can provide target information for every Investigation level; finding a different operative for each bounty tier is no longer required.
+- Novice Bounty Hunter and an active bounty are still required. Higher-tier bounties retain normal tracking-droid progression.
+- Requires a server restart; no client update needed.
