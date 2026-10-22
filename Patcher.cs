@@ -11,7 +11,7 @@ public static class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 12))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 13))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -347,7 +347,7 @@ public static class Patcher
             const string commandTable = "datatables/command/command_table.iff";
             pending[commandTable] = AreaCommands(pending.TryGetValue(commandTable, out var table) ? table : Resource(client, commandTable));
         }
-        if (manifest.Patches.Contains("map-double-click-travel") || manifest.Patches.Contains("instant-mission-accept"))
+        if (manifest.Patches.Contains("map-double-click-travel") || manifest.Patches.Contains("instant-mission-accept") || manifest.Patches.Contains("relaxed-structure-placement"))
         {
             string executableHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(client, "SWGEmu.exe"))));
             if (executableHash != "58012E57CEBC499454812BA7ED96B1289DB01E520963B4FC364EDB41C322B2A8")
@@ -358,7 +358,8 @@ public static class Patcher
             if (File.Exists(installed) && !File.ReadAllBytes(installed).SequenceEqual(payload) &&
                 (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "2A35DEA73AE37103FD2107486A5595457DD4C829650BC7F6E5DA757DFE2A7346" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "DFDE4DF7AA9D10FA75FC13990D47DFC3F0ADB97B26216381BBC2222CE6CB4F83" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "9C59052F9BCD3FCC3F20802029BE9756596DD6907A1060F840F5C64A939FCE23"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "9C59052F9BCD3FCC3F20802029BE9756596DD6907A1060F840F5C64A939FCE23" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "72AF92D5C9355D0CE25F05999F357A3DE31DB7C3325B3BD5D3AA368F2F927518"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
@@ -398,6 +399,13 @@ public static class Patcher
         {
             pending["private_launcher_instances.cfg"] = Encoding.ASCII.GetBytes("[SwgClient]\nallowMultipleInstances=true\n");
             configLines.Add(instances);
+        }
+        const string placement = ".include \"private_launcher_placement.cfg\"";
+        configLines.RemoveAll(l => l.Trim() == placement);
+        if (manifest.Patches.Contains("relaxed-structure-placement"))
+        {
+            pending["private_launcher_placement.cfg"] = Encoding.ASCII.GetBytes("[ClientGame]\nalwaysAllowStructurePlacement=true\nrenderLotManager=false\n");
+            configLines.Add(placement);
         }
         configLines.Add(icons); pending["swgemu.cfg"] = Encoding.ASCII.GetBytes(string.Join("\r\n", configLines) + "\r\n");
         // Prepare every result before touching the client; back up the complete change set.

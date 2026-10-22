@@ -51,6 +51,20 @@ int main(){
  assert(!InstallLoginPasswordFocus(loginImage));assert(!memcmp(loginBefore,loginImage+loginFocusRva,sizeof(loginBefore)));
  VirtualFree(loginImage,0,MEM_RELEASE);
  std::cout<<"PASS: saved-account password focus, blank-account username focus, missing-pointer safety, exact patch bounds, repeat install and signature rejection.\n";
+ BYTE* placement=(BYTE*)VirtualAlloc(nullptr,placementClickRva+64,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(placement);
+ const BYTE heightSignature[]={0x8a,0x45,0xe4,0x84,0xc0,0x74,0x05,0x8b,0x4d,0xcc,0x89,0x0b,0x8b,0xb6,0x74,0x02,0,0};
+ const BYTE clickSignature[]={0xe8,0x2d,0x23,0xea,0xff,0x84,0xc0,0x74,0x58,0xa0,0x58,0x88,0x90,0x01};
+ memcpy(placement+placementClickRva,clickSignature,sizeof(clickSignature));
+ memcpy(placement+placementHeightRva,heightSignature,sizeof(heightSignature));
+ assert(InstallRelaxedPlacement(placement));
+ for(size_t i=0;i<sizeof(clickSignature);++i)assert(placement[placementClickRva+i]==((i==7||i==8)?0x90:clickSignature[i]));
+ for(size_t i=0;i<sizeof(heightSignature);++i)assert(placement[placementHeightRva+i]==(i==5?0xeb:heightSignature[i]));
+ assert(InstallRelaxedPlacement(placement));
+ memcpy(placement+placementHeightRva,heightSignature,sizeof(heightSignature));placement[placementHeightRva+8]^=1;
+ BYTE unchanged[sizeof(heightSignature)];memcpy(unchanged,placement+placementHeightRva,sizeof(unchanged));
+ assert(!InstallRelaxedPlacement(placement));assert(!memcmp(unchanged,placement+placementHeightRva,sizeof(unchanged)));
+ VirtualFree(placement,0,MEM_RELEASE);
+ std::cout<<"PASS: relaxed placement preserves terrain preview height, patches only guarded preview/click branches, is idempotent, and rejects foreign code.\n";
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";
 }

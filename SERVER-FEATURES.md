@@ -335,3 +335,10 @@ launcher and its client updates.
 - Server-only additions activate when the owner restarts the updated server.
   Publishing this overview does not restart the server or install a new client patch.
 - Normal gameplay checks still apply unless a specific change above says otherwise.
+
+## Structure placement
+
+- Regional houses, city halls and other placeable structures work across Corellia, Dantooine, Lok, Naboo, Rori, Talus and Tatooine. Existing installation-only exceptions remain; additional planets are not opened to housing.
+- Placement allows more uneven terrain (up to 12 meters across the footprint), reduces object clearance buffers to 25%, and reduces point-of-interest clearance to 50 meters.
+- The client no longer silently rejects attempts with the yellow lot grid. The server checks the site and reports rejected placements. Water, protected areas, overlapping buildings, lots and other ownership/city requirements still apply.
+- Requires launcher 1.0.13, Update client, and the matching server restart.

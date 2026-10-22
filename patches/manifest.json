@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "2026.10.21.12",
-  "minimumLauncherVersion": "1.0.12",
+  "version": "2026.10.22.13",
+  "minimumLauncherVersion": "1.0.13",
   "patches": [
     "center-of-being-icon",
     "free-crafting-skills",
@@ -14,7 +14,8 @@
     "free-force-sensitive-skills",
     "instant-mission-accept",
     "companion-rider-animations",
-    "saved-account-password-focus"
+    "saved-account-password-focus",
+    "relaxed-structure-placement"
   ],
-  "notes": "Center of Being timed icon, zero crafting skill point costs, waypoint monitor defaults, and direct galaxy-wide travel, and transportation-map double-click travel, and mounted NPC conversations, and multiple game instances. Adds /lootArea and /harvestArea [hide|bone|meat]; requires matching server update. Launcher updates can now be downloaded and installed in place with Update launcher. All four Force Sensitive trees cost zero skill points; XP and unlock requirements remain. Accepting terminal missions now skips the confirmation prompt; normal server checks still apply. Adds rider attachment support for hired humanoid companions. Requires matching server companion feature. Saved account names now start the game login cursor in the password field; blank accounts retain username focus. Passwords are never stored by the launcher."
+  "notes": "Center of Being timed icon, zero crafting skill point costs, waypoint monitor defaults, and direct galaxy-wide travel, and transportation-map double-click travel, and mounted NPC conversations, and multiple game instances. Adds /lootArea and /harvestArea [hide|bone|meat]; requires matching server update. Launcher updates can now be downloaded and installed in place with Update launcher. All four Force Sensitive trees cost zero skill points; XP and unlock requirements remain. Accepting terminal missions now skips the confirmation prompt; normal server checks still apply. Adds rider attachment support for hired humanoid companions. Requires matching server companion feature. Saved account names now start the game login cursor in the password field; blank accounts retain username focus. Passwords are never stored by the launcher. Relaxed structure placement lets the matching server validate sites instead of the client yellow lot grid. Preview stays at terrain height. All regional building styles work on housing-enabled planets after the server update; protected areas, water and structure overlap remain blocked."
 }

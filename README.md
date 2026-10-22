@@ -149,3 +149,5 @@ Adds the existing player rider attachment to the two humanoid NPC appearances us
 ## Saved account login focus
 
 Version 1.0.12 focuses the in-game password field when a remembered account name is prefilled. Blank account names keep the account field focused. Use Update launcher, then Update client with the game closed. Passwords continue to be entered only in game.
+
+Launcher 1.0.13 adds relaxed structure placement for the matching private server. Run Update launcher, then Update client with the game closed. Regional styles work on all seven housing planets; the server retains water, protected-area and building-overlap checks. See [the server overview](SERVER-FEATURES.md#structure-placement).
