@@ -342,3 +342,11 @@ launcher and its client updates.
 - Placement allows more uneven terrain (up to 12 meters across the footprint), reduces object clearance buffers to 25%, and reduces point-of-interest clearance to 50 meters.
 - The client no longer silently rejects attempts with the yellow lot grid. The server checks the site and reports rejected placements. Water, protected areas, overlapping buildings, lots and other ownership/city requirements still apply.
 - Requires launcher 1.0.13, Update client, and the matching server restart.
+
+## Pack up Structure
+
+- Structure Management includes an owner-only Pack up Structure option for eligible houses and installations. It returns the original deed using normal re-deeding maintenance requirements.
+- Houses keep their original furnishings and nested container contents. Each item's room, position and rotation are saved relative to the house, so the whole layout follows a different location or house rotation when placed again.
+- Saved furnishings persist with the packed deed and are restored automatically. The original owner must place the deed; a recovery option appears if furnishings still await restoration.
+- Vendors must be removed first, and installation hoppers/schematics must be emptied. City halls, faction bases/defenses and temporary structures are excluded. Residence, city membership and access permissions use normal new-placement rules.
+- Server restart required; this option needs no additional client patch.
