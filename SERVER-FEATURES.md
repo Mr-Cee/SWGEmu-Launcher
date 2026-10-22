@@ -46,6 +46,8 @@ launcher and its client updates.
 - **Vehicles use a 2x run-speed multiplier.** Swoops are configured for **85 m/s**,
   **5x their original speed**, accounting for that multiplier. After the server
   restarts with this setting, store/recall existing swoops to refresh their speed.
+  Mounting now explicitly synchronizes both the vehicle and rider's movement speed
+  with the client, correcting the missing vehicle update. No client patch is needed.
 - **NPC conversations work while mounted** on vehicles or creature mounts,
   subject to normal range and line-of-sight rules and each NPC's service rules.
 - A shared **Galaxy chat channel** automatically joins players across planets.
