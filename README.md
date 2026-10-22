@@ -2,6 +2,9 @@
 
 A simple Windows launcher for the Mr-Cee private SWGEmu server's client patches.
 
+See **[Server features and changes](SERVER-FEATURES.md)** for the current gameplay
+additions, progression rates, companion system, housing, cities, and economy rules.
+
 ## Play
 
 1. Download **SWGEmuLauncher-win-x64.zip** from [Releases](https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest).
@@ -36,8 +39,7 @@ Running updates twice does not duplicate entries or reset login settings.
 The launcher requires a successful online manifest check before updating or playing.
 If that check or a required patch fails, the game is not started.
 An unsupported patch or newer minimum version asks for a newer launcher release.
-The launcher never downloads or executes patch scripts. Updating the patch engine
-itself requires downloading a new launcher release using the provided link.
+The launcher never downloads or executes patch scripts. Use **Update launcher** to install a newer launcher release in place.
 
 ## Build and maintain
 
