@@ -98,7 +98,7 @@ launcher and its client updates.
 
 - **Renn Talon (Master Slicer)** serves Endor's Smuggler Outpost near **-950, 1558**.
 - Use his conversation or radial menu, choose an unequipped item in your main
-  inventory, then choose a stat and press **Slice item**.
+  inventory, then choose a stat and press **OK** to approve payment.
 - **100,000 credits per completed slice**, paid from cash first, then bank.
   The original item stays in your inventory throughout; cancellation is free.
 - Weapons offer **damage +20–35%** or **attack-delay reduction 20–35%**.
