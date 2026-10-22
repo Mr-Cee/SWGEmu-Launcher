@@ -50,6 +50,13 @@ launcher and its client updates.
 - The **waypoint monitor is enabled for fresh client preferences**; saved choices
   can override that default.
 
+### Item drops
+
+- **10x item-loot rolls** for creatures, NPCs, space kills, and scripted corpse/chest drops, including dungeon and treasure chests.
+- Ten independent rolls preserve rare/common item weights and produce roughly ten times the item quantity over time, subject to available container space. Guaranteed drops can produce extra copies.
+- Credits, harvesting yields, crafting, vendor stock generation, and direct item rewards granted to players retain their normal amounts. Item stat quality is unchanged.
+- Takes effect after the server restart for newly generated loot; no client update is needed.
+
 ### Area corpse commands
 
 - **`/lootArea`** loots eligible corpses within **20 meters**. Empty scans are silent, so repeated macros do not spam chat.
