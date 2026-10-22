@@ -38,6 +38,8 @@ launcher and its client updates.
 
 ## Combat and everyday conveniences
 
+- **Sprint is granted by combat master boxes.** Use `/sprint` to run **30% faster for 30 seconds**, with a **60-second cooldown from activation** (30 seconds after normal expiry). It is free to activate and works in combat. Mounting ends the on-foot effect without resetting its cooldown.
+- Sprint covers Brawler, Marksman, the ranged/melee specialists, Smuggler, Bounty Hunter, Commando, Scout/Ranger, Creature Handler, Squad Leader, Combat Medic, and all five Jedi discipline master boxes. Existing masters receive it when logging in after the server update. Requires launcher **1.0.15**, Update client, and the matching server restart.
 - **Center of Being lasts 10 minutes**, retaining its original defense strength.
   Its timed buff icon is supported by the launcher patch.
 - **Intimidation reduces defense ratings and outgoing weapon damage by 25%.**
