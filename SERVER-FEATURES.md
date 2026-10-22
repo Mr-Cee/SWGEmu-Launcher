@@ -52,7 +52,7 @@ launcher and its client updates.
 
 ### Area corpse commands
 
-- **`/lootArea`** loots eligible corpses within **20 meters**.
+- **`/lootArea`** loots eligible corpses within **20 meters**. Empty scans are silent, so repeated macros do not spam chat.
 - **`/harvestArea`** harvests eligible corpses within **20 meters**, defaulting to hide.
 - **`/harvestArea hide`**, **`/harvestArea bone`**, and **`/harvestArea meat`** select
   the resource type.
