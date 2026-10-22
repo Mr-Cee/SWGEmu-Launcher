@@ -127,6 +127,11 @@ launcher and its client updates.
 - **Personal ship travel between starports is free** through starship terminals when
   carrying an eligible ship deed or owning an appropriate ship control device.
   Ship ownership and normal player-state/travel checks apply.
+- **Owned stored starships follow you to other starports.** Opening a starship
+  terminal retrieves your landed datapad ships to that port, including after
+  ticket travel. No retrieval fee applies. Parking and landing-return information
+  update together; ships already in space stay where they are. Normal ownership,
+  pilot certification, component, and travel requirements still apply.
 - **Aurilia Village has a public shuttleport on Dathomir**, with pad center at
   **5345, -4105**. Travel terminal/arrival is nearby at approximately **5338, -4092**.
 - Aurilia shuttle travel costs **10,000 credits each way**, including city taxes.
