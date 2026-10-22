@@ -297,6 +297,7 @@ launcher and its client updates.
   terminals, registration, and specialization.
 - Ordinary private-house/installation fees and existing maintenance debt remain.
 - Elections and income-tax collection also follow the daily city-update cycle.
+- Each active city can have **40 skill trainers and 40 mission terminals**, at every city rank. Status displays and rank-change cleanup use these same limits.
 
 ## Launcher and client improvements
 
