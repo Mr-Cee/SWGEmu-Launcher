@@ -40,7 +40,7 @@ launcher and its client updates.
 
 - **Sprint is granted by combat master boxes.** Click Sprint under **Combat abilities**, drag it to your toolbar, or use `/sprint` to run **30% faster for 30 seconds**, with a **60-second cooldown from activation** (30 seconds after normal expiry). It is free to activate and works in combat. Mounting ends the on-foot effect without resetting its cooldown.
 - Sprint covers Brawler, Marksman, the ranged/melee specialists, Smuggler, Bounty Hunter, Commando, Scout/Ranger, Creature Handler, Squad Leader, Combat Medic, and all five Jedi discipline master boxes. Existing masters receive it when logging in after the server update. It uses the **Burst Run icon** and appears only after learning a qualifying master box. Requires launcher **1.0.16**, Update client, and the matching server restart.
-- **Squad Leader group support reaches the whole planet**, including members in different buildings. Passive benefits refresh when members or the leader travel away and return. Form Up, Steady Aim, Boost Morale, Rally, Retreat, and Volley Fire reach eligible same-planet members when activated. Normal group-leader, skill, target, PvP, cost, cooldown and duration rules remain; Volley Fire attacks still obey weapon range and line of sight. Requires the server restart; no client update.
+- **Squad Leader group support reaches the whole planet**, including members in different buildings. Passive benefits refresh when members or the leader travel away and return. Form Up, Steady Aim, Boost Morale, Rally, Retreat, and Volley Fire reach eligible same-planet members when activated. Player Squad Leaders must lead the group; hired Squad Leaders can support it while the owner keeps leadership. Skill, target, PvP, cost, cooldown and duration rules remain; Volley Fire attacks still obey weapon range and line of sight. Requires the server restart; no client update.
 - **Center of Being lasts 10 minutes**, retaining its original defense strength.
   Its timed buff icon is supported by the launcher patch.
 - **Intimidation reduces defense ratings and outgoing weapon damage by 25%.**
@@ -172,8 +172,8 @@ launcher and its client updates.
 
 - The **Companion Recruiter** is beside the Event NPC outside Theed starport,
   at approximately **-4862, 4150**.
-- Choose from **12 professions**: Pistoleer, Carbineer, Rifleman, Teras Kasi Artist,
-  Fencer, Swordsman, Pikeman, Commando, Bounty Hunter, Smuggler, Doctor, and Combat Medic.
+- Choose from **13 professions**: Pistoleer, Carbineer, Rifleman, Teras Kasi Artist,
+  Fencer, Swordsman, Pikeman, Commando, Bounty Hunter, Smuggler, Doctor, Combat Medic, and Squad Leader.
 - **Daily contract:** 100,000 credits to hire, including the first 24 hours;
   then **25,000 credits per contract per day**.
 - **Permanent contract:** **5,000,000 credits once**, with no daily fee.
@@ -192,6 +192,7 @@ launcher and its client updates.
 - Companions copy the owner's vehicle or creature mount for following and mounting.
   Their temporary copies remain companion equipment.
 - Combat abilities come from learned skill boxes and must match the selected weapon.
+- **Squad Leader companions** use a carbine and progress from novice through their native skill tree using carbine XP. They automatically use learned Form Up, Rally, Steady Aim, emergency Retreat, Boost Morale, and Volley Fire when needed. Eligible players and companions receive planet-wide support; passive bonuses use one strongest provider without stacking. Normal contract prices apply. Available after the server restart; no client update.
 - Doctors and Combat Medics support nearby group players and companions.
 - Combat Medics prioritize the **lowest health percentage** eligible group patient
   and use unlocked poison/disease attacks when healing is not taking priority.
