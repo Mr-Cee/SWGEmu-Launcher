@@ -55,8 +55,8 @@ launcher and its client updates.
 
 ### Item drops
 
-- **10x item-loot rolls** for creatures, NPCs, space kills, and scripted corpse/chest drops, including dungeon and treasure chests.
-- Ten independent rolls preserve rare/common item weights and produce roughly ten times the item quantity over time, subject to available container space. Guaranteed drops can produce extra copies.
+- **Up to five loot attempts, stopping after the first item drops**, for creatures, NPCs, space kills, and scripted corpse/chest loot, including dungeon and treasure chests.
+- Failed rolls can retry, but a successful item ends the remaining attempts. Item weights stay the same; guaranteed successful drops produce one item per loot-generation call. Separate scripted rewards and explicitly defined loot sets remain separate.
 - Credits, harvesting yields, crafting, vendor stock generation, and direct item rewards granted to players retain their normal amounts. Item stat quality is unchanged.
 - Takes effect after the server restart for newly generated loot; no client update is needed.
 
