@@ -356,7 +356,7 @@ launcher and its client updates.
 
 ## Player-city services
 
-- Player banks replace the middle bank terminal with a normal bazaar terminal, keeping both outer bank terminals. All three bank styles are supported, and existing banks upgrade automatically after restart.
+- Player banks replace the middle bank terminal with a normal bazaar terminal, keeping both outer bank terminals. All three bank styles are supported. Existing player-bank installations upgrade automatically after restart without re-deeding the bank.
 - Recruit Skill Trainer includes Spynet Informant. Mayors recruit it outdoors for 1,000 credits from the city treasury; it counts toward the 40-trainer cap and uses normal trainer maintenance and the mayor's Remove radial.
 - Recruited Spynet informants serve every Investigation tier through normal bounty conversations. They persist across restarts.
 - Server restart required; no client update needed.
