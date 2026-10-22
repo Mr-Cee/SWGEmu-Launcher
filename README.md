@@ -81,7 +81,9 @@ All public shuttleports and starports can travel directly between enabled planet
 Double-click a destination icon on the normal transportation map to request paid,
 one-way travel without a ticket or collector. A single click still selects, and
 the normal purchase button still purchases tickets. Double-click always uses the
-one-way fare, even if the map's round-trip checkbox was selected.
+one-way fare, even if the map's round-trip checkbox was selected. At a starship
+terminal with a selected personal ship, double-click uses the ship's normal Travel
+action instead: free travel with native ship and passenger validation.
 
 This uses our original 32-bit `dinput8.dll` extension. The launcher supports only
 client SHA256 `58012e57cebc499454812ba7ed96b1289db01e520963b4fc364edb41c322b2a8`.

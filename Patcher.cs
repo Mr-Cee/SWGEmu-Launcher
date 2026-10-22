@@ -19,7 +19,7 @@ public static class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 13))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 14))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -359,7 +359,8 @@ public static class Patcher
                 (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "2A35DEA73AE37103FD2107486A5595457DD4C829650BC7F6E5DA757DFE2A7346" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "DFDE4DF7AA9D10FA75FC13990D47DFC3F0ADB97B26216381BBC2222CE6CB4F83" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "9C59052F9BCD3FCC3F20802029BE9756596DD6907A1060F840F5C64A939FCE23" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "72AF92D5C9355D0CE25F05999F357A3DE31DB7C3325B3BD5D3AA368F2F927518"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "72AF92D5C9355D0CE25F05999F357A3DE31DB7C3325B3BD5D3AA368F2F927518" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "4479CB8D5AF9551E6C2BB701E850953BE5904E3FE494316EB16A7D728CB72B3F"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }

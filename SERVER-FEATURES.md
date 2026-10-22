@@ -124,7 +124,8 @@ launcher and its client updates.
   the replacement destination-list popup.
 - **Personal ship travel is free to all ticket-permitted destinations**, including
   starports, shuttleports, Aurilia, and eligible player-city stops, from starship
-  terminals. Map double-click accepts an eligible carried ship deed or datapad
+  terminals. Destination double-click uses the selected ship's normal Travel action,
+  preserving group passengers. Map double-click accepts an eligible carried ship deed or datapad
   ship; the native ship Travel action retains pilot certification/reactor/engine
   requirements. Both use the normal route, incoming, state, and city-ban checks.
 - Ship travel has **no fixed post-boot delay**. The world and destination services

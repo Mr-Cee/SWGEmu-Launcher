@@ -1,9 +1,10 @@
 #include "travel.cpp"
 #include <cassert>
 #include <iostream>
-static int nativeCalls,forwarded,closed;static std::wstring received;
-static uint32_t __cdecl FakeQueue(uint32_t,const void*,const NativeWide* text,int,int){nativeCalls++;received.assign(text->first,text->last);return 1;}
-static void __fastcall FakeButton(void* self,void*,void* context){if(context==*(void**)((BYTE*)self+0xa8)){std::wstring s=L"naboo Theed naboo Keren 1";NativeWide n{s.data(),s.data()+s.size(),s.data()+s.size()+1};QueueHook(1,nullptr,&n,0,0);}}
+static int nativeCalls,forwarded,closed;static std::wstring received;static uint32_t receivedCommand;static const void* receivedTarget;static int terminal;
+static uint32_t __cdecl FakeQueue(uint32_t command,const void* target,const NativeWide* text,int,int){nativeCalls++;receivedCommand=command;receivedTarget=target;received.assign(text->first,text->last);return 1;}
+static void __fastcall FakeClose(void*,void*);
+static void __fastcall FakeButton(void* self,void*,void* context){if(context==*(void**)((BYTE*)self+0xa8)){std::wstring s=L"naboo Theed naboo Keren 1";NativeWide n{s.data(),s.data()+s.size(),s.data()+s.size()+1};QueueHook(1,nullptr,&n,0,0);}else if(context==*(void**)((BYTE*)self+0xd8)){std::wstring s=L"123456 2 456 789 naboo Keren";NativeWide n{s.data(),s.data()+s.size(),s.data()+s.size()+1};FakeQueue(2,&terminal,&n,0,0);FakeClose(self,nullptr);}}
 static void __fastcall FakeClose(void*,void*){closed++;}
 static bool __fastcall FakeMessage(void*,void*,void*,const void*){forwarded++;return true;}
 static const char* testAccount="";static void* focusedControl;
@@ -18,6 +19,18 @@ int main(){
  MessageHook(self,nullptr,&destination,&doubled);assert(nativeCalls==1);
  assert(MessageHook(self,nullptr,&purchase,&doubled));assert(forwarded==2&&nativeCalls==1);
  std::wstring normal=L"a b c d 1";NativeWide n{normal.data(),normal.data()+normal.size(),normal.data()+normal.size()+1};QueueHook(1,nullptr,&n,0,0);assert(received==normal);
+ int travel;*(void**)(self+0xd8)=&travel;*(uint32_t*)(self+0x118)=123456;
+ lastRequest=0;int callsBefore=nativeCalls,closesBefore=closed;
+ assert(!MessageHook(self,nullptr,&destination,&doubled));
+ assert(nativeCalls==callsBefore+1&&closed==closesBefore+1);
+ assert(receivedCommand==2&&receivedTarget==&terminal&&received==L"123456 2 456 789 naboo Keren");
+ assert(!directRequest);MessageHook(self,nullptr,&destination,&doubled);assert(nativeCalls==callsBefore+1);
+ // A high-half-only valid ship ID also selects Travel. A missing action preserves native input.
+ *(uint32_t*)(self+0x118)=0;*(uint32_t*)(self+0x11c)=1;lastRequest=0;
+ MessageHook(self,nullptr,&destination,&doubled);assert(receivedCommand==2&&nativeCalls==callsBefore+2);
+ *(void**)(self+0xd8)=nullptr;lastRequest=0;assert(MessageHook(self,nullptr,&destination,&doubled));
+ assert(nativeCalls==callsBefore+2);*(uint32_t*)(self+0x11c)=0;
+ std::cout<<"PASS: personal ship double-click uses native Travel once, retains ship/terminal/passengers, and handles missing actions safely.\n";
  BYTE* fake=(BYTE*)VirtualAlloc(nullptr,missionConfirmRva+32,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(fake);
  const BYTE signature[]={0x8a,0x45,0x0c,0x84,0xc0,0x0f,0x84,0xe6,0x00,0x00,0x00,0xe8,0xff,0xb9,0xaa,0xff};
  memcpy(fake+missionConfirmRva,signature,sizeof(signature));
