@@ -57,8 +57,23 @@ launcher and its client updates.
 
 - **Up to five loot attempts, stopping after the first item drops**, for creatures, NPCs, space kills, and scripted corpse/chest loot, including dungeon and treasure chests.
 - Failed rolls can retry, but a successful item ends the remaining attempts. Item weights stay the same; guaranteed successful drops produce one item per loot-generation call. Separate scripted rewards and explicitly defined loot sets remain separate.
-- Credits, harvesting yields, crafting, vendor stock generation, and direct item rewards granted to players retain their normal amounts. Item stat quality is unchanged.
+- Credits, harvesting yields, crafting, vendor stock generation, and direct item rewards granted to players retain their normal amounts. Loot rarity bonuses are described below.
 - Takes effect after the server restart for newly generated loot; no client update is needed.
+
+Eligible dropped **weapons, damaging consumables such as grenades, and components
+with damage or power** can roll one rarity:
+
+| Rarity | Chance | Damage/power multiplier | Name color |
+| --- | --- | --- | --- |
+| Rare | 20% | 2x | Blue |
+| Epic | 10% | 3x | Purple |
+| Mythical | 5% | 4x | Red |
+| Legendary | 2.5% | 5x | Orange |
+
+- The remaining **62.5%** are normal. Tiers are mutually exclusive and replace the old Exceptional/Legendary roll for eligible drops.
+- Only rolled **minimum damage, maximum damage, or power** is multiplied. Speed, charges, durability, costs and other stats stay unchanged by rarity.
+- The whole item name uses the tier color and ends with its bracketed tag, such as **Metal Staff [Epic]**. Epic damage 10-50 becomes 30-150; Legendary Janta blood power 100 becomes 500.
+- Existing items, crafted items, direct player rewards and generated vendor stock are unchanged. Requires the server restart; no client update.
 
 ### Area corpse commands
 
