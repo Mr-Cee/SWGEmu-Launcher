@@ -60,7 +60,7 @@ launcher and its client updates.
 - Credits, harvesting yields, crafting, vendor stock generation, and direct item rewards granted to players retain their normal amounts. Loot rarity bonuses are described below.
 - Takes effect after the server restart for newly generated loot; no client update is needed.
 
-Eligible dropped **weapons, damaging consumables such as grenades, and components
+Eligible dropped and newly generated bazaar/vendor **weapons, damaging consumables such as grenades, and components
 with damage or power** can roll one rarity:
 
 | Rarity | Chance | Damage/power multiplier | Name color |
@@ -73,7 +73,8 @@ with damage or power** can roll one rarity:
 - The remaining **62.5%** are normal. Tiers are mutually exclusive and replace the old Exceptional/Legendary roll for eligible drops.
 - Only rolled **minimum damage, maximum damage, or power** is multiplied. Speed, charges, durability, costs and other stats stay unchanged by rarity.
 - The whole item name uses the tier color and ends with its bracketed tag, such as **Metal Staff [Epic]**. Epic damage 10-50 becomes 30-150; Legendary Janta blood power 100 becomes 500.
-- Existing items, crafted items, direct player rewards and generated vendor stock are unchanged. Requires the server restart; no client update.
+- **Newly generated bazaar and neighborhood vendor stock uses these same rarity chances**, applied after its base quality roll. The beginner-to-server-best quality range and normal stock pricing remain.
+- Existing items/listings, ordinary player-crafted items and direct player rewards are unchanged. Requires the server restart; no client update.
 
 ### Area corpse commands
 
