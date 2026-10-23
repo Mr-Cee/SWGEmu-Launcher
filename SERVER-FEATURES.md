@@ -77,6 +77,8 @@ with damage or power** can roll one rarity:
 - Existing player items/listings, ordinary player-crafted items and direct player rewards are unchanged. Requires the server restart; no client update.
 - The rarity rollout refresh replaces old **unsold server-generated stock** once, then refills bazaars and generated house vendors. Player listings and purchased items awaiting pickup are preserved; refreshed stock is not wiped again on later restocks.
 
+- **All Janta tiers can drop armor and clothing attachments with bonuses from +1 to +15.** Each attachment type has the same 3.5% selection chance as Janta blood; blood's chance is unchanged. Normal attachment modifier pools apply. Requires a server restart; no client update.
+
 ### Area corpse commands
 
 - **`/lootArea`** loots eligible corpses within **20 meters**. Empty scans are silent, so repeated macros do not spam chat.
