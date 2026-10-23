@@ -159,7 +159,7 @@ Launcher 1.0.13 adds relaxed structure placement for the matching private server
 
 ## Combat master Sprint
 
-Launcher 1.0.21 adds Sprint to 22 combat master boxes as a clickable learned Combat ability, with the Burst Run icon. Click it in Combat abilities or drag it to your toolbar. You can also use `/sprint` for 50% faster on-foot movement for 30 seconds; it recharges 60 seconds after activation. Update launcher, then Update client with the game closed. The matching server update and restart are required. Existing master characters receive Sprint on login; no retraining is necessary.
+Launcher 1.0.22 adds Sprint to 22 combat master boxes as a clickable learned Combat ability, with the Burst Run icon. Click it in Combat abilities or drag it to your toolbar. You can also use `/sprint` for 50% faster on-foot movement for 30 seconds; it recharges 60 seconds after activation. Update launcher, then Update client with the game closed. The matching server update and restart are required. Existing master characters receive Sprint on login; no retraining is necessary.
 
 Launcher 1.0.17 removes the inventory destroy confirmation. Use **Update launcher**, then **Update client** with the game closed. The matching server update adds persistent **Prevent Destroy / Unlock Item** protection against deletion, trade and sale while permitting house placement.
 

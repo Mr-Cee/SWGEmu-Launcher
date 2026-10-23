@@ -362,7 +362,8 @@ public static partial class Patcher
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "72AF92D5C9355D0CE25F05999F357A3DE31DB7C3325B3BD5D3AA368F2F927518" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "4479CB8D5AF9551E6C2BB701E850953BE5904E3FE494316EB16A7D728CB72B3F" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "FCAE3562EF9D658C26945DF4201F9BA0FFE6CD60B4857DDE53E01025055EF625" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "5AA5F7CBA5141436C44069D1F2535821520C33B4D63FCC38676FF8796E210102"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "5AA5F7CBA5141436C44069D1F2535821520C33B4D63FCC38676FF8796E210102" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "62956C5EEC8464FB9D37D0DCF4737839669555931A9B1DFF49CCEC4CC246A030"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
