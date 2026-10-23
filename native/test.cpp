@@ -78,6 +78,21 @@ int main(){
  assert(!InstallRelaxedPlacement(placement));assert(!memcmp(unchanged,placement+placementHeightRva,sizeof(unchanged)));
  VirtualFree(placement,0,MEM_RELEASE);
  std::cout<<"PASS: relaxed placement preserves terrain preview height, patches only guarded preview/click branches, is idempotent, and rejects foreign code.\n";
+ BYTE* destroyFake=(BYTE*)VirtualAlloc(nullptr,itemDestroyConfirmRva+64,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(destroyFake);
+ const BYTE destroySignature[]={0x8a,0x45,0x0c,0x84,0xc0,0x0f,0x85,0xb3,0,0,0,0xe8,0xe0,0x64,0x03,0,0x84,0xc0,0x0f,0x84,0xa6,0,0,0};
+ memcpy(destroyFake+itemDestroyConfirmRva,destroySignature,sizeof(destroySignature));
+ assert(InstallInstantItemDestroy(destroyFake));
+ const BYTE destroyConfirmed[]={0xe9,0xb4,0,0,0,0x90};
+ assert(!memcmp(destroyFake+itemDestroyConfirmRva,destroySignature,5));
+ assert(!memcmp(destroyFake+itemDestroyConfirmRva+5,destroyConfirmed,6));
+ assert(!memcmp(destroyFake+itemDestroyConfirmRva+11,destroySignature+11,sizeof(destroySignature)-11));
+ assert(InstallInstantItemDestroy(destroyFake));
+ assert(itemDestroyConfirmRva+5+5+*(int32_t*)(destroyFake+itemDestroyConfirmRva+6)==0x4da94e);
+ memcpy(destroyFake+itemDestroyConfirmRva,destroySignature,sizeof(destroySignature));destroyFake[itemDestroyConfirmRva+12]^=1;
+ BYTE destroyBefore[sizeof(destroySignature)];memcpy(destroyBefore,destroyFake+itemDestroyConfirmRva,sizeof(destroyBefore));
+ assert(!InstallInstantItemDestroy(destroyFake));assert(!memcmp(destroyBefore,destroyFake+itemDestroyConfirmRva,sizeof(destroyBefore)));
+ VirtualFree(destroyFake,0,MEM_RELEASE);
+ std::cout<<"PASS: inventory destroy uses the native confirmed path, preserves adjacent instructions, targets the original request path, is idempotent and rejects mismatched signatures.\n";
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";
 }

@@ -11,7 +11,7 @@ public static partial class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint", "instant-item-destroy"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static partial class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 16))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 17))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -337,13 +337,13 @@ public static partial class Patcher
         if (!verifyOnly && IsGameRunning(client)) throw new IOException("Close all game windows before installing updates.");
         var pending = new Dictionary<string, byte[]>();
         if (manifest.Patches.Contains("companion-rider-animations")) {
-            log("Preparing companion mount support…");
+            log("Preparing companion mount supportâ€¦");
             foreach (string resource in new[] { "object/mobile/shared_dressed_brawler_trainer_01.iff", "object/mobile/shared_dressed_doctor_trainer_human_female_01.iff" })
                 pending[resource] = CompanionRider(Resource(client, resource));
         }
-        if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversations…"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
+        if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversationsâ€¦"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
         if (manifest.Patches.Contains("area-corpse-commands")) {
-            log("Preparing area loot and harvest commands…");
+            log("Preparing area loot and harvest commandsâ€¦");
             const string commandTable = "datatables/command/command_table.iff";
             pending[commandTable] = AreaCommands(pending.TryGetValue(commandTable, out var table) ? table : Resource(client, commandTable));
         }
@@ -360,21 +360,22 @@ public static partial class Patcher
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "DFDE4DF7AA9D10FA75FC13990D47DFC3F0ADB97B26216381BBC2222CE6CB4F83" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "9C59052F9BCD3FCC3F20802029BE9756596DD6907A1060F840F5C64A939FCE23" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "72AF92D5C9355D0CE25F05999F357A3DE31DB7C3325B3BD5D3AA368F2F927518" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "4479CB8D5AF9551E6C2BB701E850953BE5904E3FE494316EB16A7D728CB72B3F"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "4479CB8D5AF9551E6C2BB701E850953BE5904E3FE494316EB16A7D728CB72B3F" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "FCAE3562EF9D658C26945DF4201F9BA0FFE6CD60B4857DDE53E01025055EF625"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
 
-        if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routes…"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
-        if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skillsâ€¦"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
+        if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routesâ€¦"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
+        if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skillsÃ¢â‚¬Â¦"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
         if (manifest.Patches.Contains("free-force-sensitive-skills")) {
-            log("Preparing free Force Sensitive skill points…");
+            log("Preparing free Force Sensitive skill pointsâ€¦");
             const string skills = "datatables/skill/skills.iff";
             pending[skills] = ForceSensitiveCosts(pending.TryGetValue(skills, out var table) ? table : Resource(client, skills));
         }
-        if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being iconâ€¦"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
+        if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being iconÃ¢â‚¬Â¦"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
         if (manifest.Patches.Contains("combat-master-sprint")) {
-            log("Preparing combat master Sprint ability…");
+            log("Preparing combat master Sprint abilityâ€¦");
             byte[] Current(string path) => pending.TryGetValue(path, out var value) ? value : Resource(client,path);
             const string skills="datatables/skill/skills.iff", commands="datatables/command/command_table.iff", modifiers="datatables/modifiers/modifiers.iff";
             pending[skills]=SprintSkills(Current(skills)); pending[commands]=SprintCommands(Current(commands)); pending[modifiers]=SprintModifiers(Current(modifiers));

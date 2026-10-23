@@ -129,8 +129,8 @@ with damage or power** can roll one rarity:
   inventory, then choose a stat and press **OK** to approve payment.
 - **100,000 credits per completed slice**, paid from cash first, then bank.
   The original item stays in your inventory throughout; cancellation is free.
-- Weapons offer **damage +20–35%** or **attack-delay reduction 20–35%**.
-- Armor offers **effectiveness +11–35%** or **encumbrance reduction 20–45%**.
+- Weapons offer **damage +20â€“35%** or **attack-delay reduction 20â€“35%**.
+- Armor offers **effectiveness +11â€“35%** or **encumbrance reduction 20â€“45%**.
 - Results roll within the native **Master Smuggler ranges**. The service completes
   the slice; the maximum roll is possible but is not guaranteed.
 - One slice per item. Already-sliced, broken, and unsliceable items are ineligible.
@@ -396,3 +396,11 @@ with damage or power** can roll one rarity:
 - Recruited Spynet informants serve every Investigation tier through normal bounty conversations. They persist across restarts.
 - **Junk Dealer** is also available through Recruit Skill Trainer, with normal junk-selling conversations. It costs 1,000 city treasury credits, counts toward the 40-trainer cap, persists across restarts, and has the mayor's Remove radial. Available after the server restart; no client update.
 - Server restart required; no client update needed.
+
+### Item protection and quick destruction
+
+- Inventory item radial menus offer **Prevent Destroy** and **Unlock Item**. Protection is saved with the item.
+- Protected items cannot be destroyed, traded, sold on the bazaar or vendors, or sold to junk dealers. Bags containing protected items are also blocked from deletion, trade and market sale. Unlock the protected contents individually first.
+- Protected items can still be placed in houses.
+- Inventory item destruction no longer asks for confirmation; protected items are rejected by the server.
+- Requires the matching server restart and launcher 1.0.17 client update. Live game acceptance remains pending.
