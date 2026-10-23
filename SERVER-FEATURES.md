@@ -74,7 +74,8 @@ with damage or power** can roll one rarity:
 - Only rolled **minimum damage, maximum damage, or power** is multiplied. Speed, charges, durability, costs and other stats stay unchanged by rarity.
 - The whole item name uses the tier color and ends with its bracketed tag, such as **Metal Staff [Epic]**. Epic damage 10-50 becomes 30-150; Legendary Janta blood power 100 becomes 500.
 - **Newly generated bazaar and neighborhood vendor stock uses these same rarity chances**, applied after its base quality roll. The beginner-to-server-best quality range and normal stock pricing remain.
-- Existing items/listings, ordinary player-crafted items and direct player rewards are unchanged. Requires the server restart; no client update.
+- Existing player items/listings, ordinary player-crafted items and direct player rewards are unchanged. Requires the server restart; no client update.
+- The rarity rollout refresh replaces old **unsold server-generated stock** once, then refills bazaars and generated house vendors. Player listings and purchased items awaiting pickup are preserved; refreshed stock is not wiped again on later restocks.
 
 ### Area corpse commands
 
