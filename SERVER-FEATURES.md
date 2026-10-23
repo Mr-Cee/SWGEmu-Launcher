@@ -11,6 +11,13 @@ launcher and its client updates.
 ## Characters, skills, and experience
 
 - **Solo entertainer healing crafting:** Slitherhorn [Ent Heal EXP] unlocks at Novice Entertainer and awards **500 base healing XP** for **30 + 15 metal**. Slitherhorn II [Ent Heal EXP] unlocks at either Novice Dancer or Novice Musician and awards **1,000 base healing XP** for **45 + 23 metal**. Existing entertainer XP bonuses apply. These are training props and cannot play music. Requires launcher **1.0.19**, its client update, and the updated server.
+- **Open entertainer buffs:** A player can watch or listen to a player entertainer
+  without joining their group or using `/setperformancebufftarget`. After at least
+  **one minute**, stopping `/watch` or `/listen` grants **Mind, Focus, and Willpower**
+  together. Strength still comes from the entertainer's corresponding dance- or
+  music-healing skill. Normal venue, range, line-of-sight, flourish, duration,
+  state, deny-service, cap, and stronger-existing-buff rules remain. Requires the
+  server restart; no client update.
 
 
 - **10 characters per account** in this galaxy, with up to **4 online at once**.
@@ -44,6 +51,10 @@ launcher and its client updates.
 - **Sprint is granted by combat master boxes.** Click Sprint under **Combat abilities**, drag it to your toolbar, or use `/sprint` to run **50% faster for 30 seconds**, with a **60-second cooldown from activation** (30 seconds after normal expiry). It is free to activate and works in combat. Mounting ends the on-foot effect without resetting its cooldown.
 - Sprint covers Brawler, Marksman, the ranged/melee specialists, Smuggler, Bounty Hunter, Commando, Scout/Ranger, Creature Handler, Squad Leader, Combat Medic, and all five Jedi discipline master boxes. Existing masters receive it when logging in after the server update. It uses the **Burst Run icon** and appears only after learning a qualifying master box. Requires launcher **1.0.22**, Update client, and the matching server restart.
 - **Squad Leader group support reaches the whole planet**, including members in different buildings. Passive benefits refresh when members or the leader travel away and return. Form Up, Steady Aim, Boost Morale, Rally, Retreat, and Volley Fire reach eligible same-planet members when activated. Player Squad Leaders must lead the group; hired Squad Leaders can support it while the owner keeps leadership. Skill, target, PvP, cost, cooldown and duration rules remain; Volley Fire attacks still obey weapon range and line of sight. Requires the server restart; no client update.
+- **Galaxy-wide player invitations:** `/invite PlayerName` can find any online
+  player across ground planets and space. Normal leader, group-size, ignore-list,
+  already-grouped, pending-invite, and self-invite protections remain. Pet invite
+  range behavior is unchanged. Requires the server restart; no client update.
 - **Center of Being lasts 10 minutes**, retaining its original defense strength.
   Its timed buff icon is supported by the launcher patch.
 - **Intimidation reduces defense ratings and outgoing weapon damage by 25%.**
@@ -81,6 +92,12 @@ with damage or power** can roll one rarity:
 - The rarity rollout refresh replaces old **unsold server-generated stock** once, then refills bazaars and generated house vendors. Player listings and purchased items awaiting pickup are preserved; refreshed stock is not wiped again on later restocks.
 
 - **All Janta tiers can drop armor and clothing attachments with bonuses from +1 to +15.** Each attachment type has the same 3.5% selection chance as Janta blood; blood's chance is unchanged. Normal attachment modifier pools apply. Requires a server restart; no client update.
+- **Attachments display their type, value, and localized stat**, such as
+  **`[CA] +15 Battle Fatigue Healing (Music)`** or **`[AA] +10 Unarmed Damage`**.
+  Multi-stat attachments list every bonus. This applies to future loot and
+  server-generated attachments; existing inventory items and existing bazaar
+  listings refresh after the server restarts. Stats and strengths are unchanged;
+  no client update is required.
 
 ### Area corpse commands
 
@@ -114,7 +131,7 @@ with damage or power** can roll one rarity:
   Remove existing matching buff icons first when requesting a complete fresh set.
 - The Event NPC can **clear wounds, battle fatigue, damage-over-time effects, and
   combat debuffs**, while preserving beneficial Doctor/Entertainer buffs.
-- **Free Novice Freelance Pilot + starter Scyk Light Fighter**, through the Event NPC conversation or radial menu. One starter package per character, with a fitted ship delivered directly to the datapad. Existing Scyks are recognized to avoid duplicates; native ship/datapad capacity and pilot-profession restrictions apply. Existing Freelance pilots keep their progress. Requires the server restart; no client update.
+- **Free Novice Freelance Pilot + starter Scyk Light Fighter**, through the Event NPC conversation or radial menu. One starter package per character, with a fitted reactor and other starter components delivered directly to the datapad so newly granted ships are travel-ready. Existing Scyks are recognized to avoid duplicates and are not retrofitted; native ship/datapad capacity and pilot-profession restrictions apply. Existing Freelance pilots keep their progress. Requires the server restart; no client update.
 - **Purchase Master Politician for 500,000 credits and zero skill points**, through
   the Event NPC's conversation or radial menu. Includes all **18 skill boxes** and
   prerequisites, without an XP requirement. Payment uses cash first, then bank;
@@ -216,7 +233,14 @@ with damage or power** can roll one rarity:
 - Combat abilities come from learned skill boxes and must match the selected weapon.
 - Companions prefer a usable learned **AoE or cone attack at least every other queued weapon attack**, including when starting a new target. Normal attacks remain available when no AoE is usable. Skill, weapon, cooldown, range and native combat restrictions still apply; healing and separately scheduled grenades retain their existing behavior. Requires a server restart; no client update.
 - Companion skill windows hide internal `private_` progression markers, showing real granted commands and certifications. This is a display correction across all professions; learned abilities and combat behavior are unchanged.
-- **Squad Leader companions** use a carbine and progress from novice through their native skill tree using carbine XP. They automatically use learned Form Up, Rally, Steady Aim, emergency Retreat, Boost Morale, and Volley Fire when needed. Eligible players and companions receive planet-wide support; passive bonuses use one strongest provider without stacking. Normal contract prices apply. Available after the server restart; no client update.
+- **Squad Leader companions** use a carbine and progress from novice through their
+  native skill tree using **Squad Leader XP from qualifying group kills**. They do
+  not need to lead the group or damage the defeated enemy; player Squad Leaders
+  still must be the actual group leader. Hired Squad Leaders automatically use
+  learned Form Up, Rally, Steady Aim, emergency Retreat, Boost Morale, and Volley
+  Fire when needed. Eligible players and companions receive planet-wide support;
+  passive bonuses use one strongest provider without stacking. Normal contract
+  prices apply. Available after the server restart; no client update.
 - Doctors and Combat Medics support nearby group players and companions.
 - Combat Medics prioritize the **lowest health percentage** eligible group patient
   and use unlocked poison/disease attacks when healing is not taking priority.
