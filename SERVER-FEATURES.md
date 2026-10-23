@@ -406,3 +406,5 @@ with damage or power** can roll one rarity:
 - Requires the matching server restart and launcher 1.0.17 client update. Live game acceptance remains pending.
 
 - **Junk dealer quick sales:** Double-click a listed item to sell that item, or use Sell. Sell All stays separate; item protection still applies. Requires the matching server restart; no client update is needed.
+
+- **Universal junk dealers:** Every junk dealer buys all junk specialties and non-crafted enemy loot types, including weapons, armor, components, attachments, food, clothing, deeds and resources. Existing junk prices are retained; otherwise eligible loot sells for **100 credits per item or resource stack**, shown in the sale list. Broken and sliced loot is accepted. Protected items, No Trade items and nonempty containers remain excluded. Move items out of bags and equipped slots into the main inventory to sell them. Requires the matching server restart; no client update.
