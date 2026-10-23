@@ -382,7 +382,7 @@ public static partial class Patcher
             pending[skills]=SprintSkills(Current(skills)); pending[commands]=SprintCommands(Current(commands)); pending[modifiers]=SprintModifiers(Current(modifiers));
             pending["ui/ui_styles.inc"]=SprintIcons(Current("ui/ui_styles.inc"));
             pending["string/en/cmd_n.stf"]=SprintStrings(Current("string/en/cmd_n.stf"),"Sprint");
-            pending["string/en/cmd_d.stf"]=SprintStrings(Current("string/en/cmd_d.stf"),"Run 30% faster on foot for 30 seconds. Cooldown: 60 seconds from activation. Granted by combat master skill boxes. Mounting ends Sprint.");
+            pending["string/en/cmd_d.stf"]=SprintStrings(Current("string/en/cmd_d.stf"),"Run 50% faster on foot for 30 seconds. Cooldown: 60 seconds from activation. Granted by combat master skill boxes. Mounting ends Sprint.");
         }
         if (manifest.Patches.Contains("entertainer-healing-crafting")) {
             log("Preparing solo entertainer healing crafting recipes…");
