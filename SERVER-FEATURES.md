@@ -211,6 +211,7 @@ with damage or power** can roll one rarity:
 - Companions copy the owner's vehicle or creature mount for following and mounting.
   Their temporary copies remain companion equipment.
 - Combat abilities come from learned skill boxes and must match the selected weapon.
+- Companions prefer a usable learned **AoE or cone attack at least every other queued weapon attack**, including when starting a new target. Normal attacks remain available when no AoE is usable. Skill, weapon, cooldown, range and native combat restrictions still apply; healing and separately scheduled grenades retain their existing behavior. Requires a server restart; no client update.
 - Companion skill windows hide internal `private_` progression markers, showing real granted commands and certifications. This is a display correction across all professions; learned abilities and combat behavior are unchanged.
 - **Squad Leader companions** use a carbine and progress from novice through their native skill tree using carbine XP. They automatically use learned Form Up, Rally, Steady Aim, emergency Retreat, Boost Morale, and Volley Fire when needed. Eligible players and companions receive planet-wide support; passive bonuses use one strongest provider without stacking. Normal contract prices apply. Available after the server restart; no client update.
 - Doctors and Combat Medics support nearby group players and companions.
