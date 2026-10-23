@@ -19,7 +19,7 @@ public static partial class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 19))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > typeof(Patcher).Assembly.GetName().Version)
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
