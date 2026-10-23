@@ -404,3 +404,5 @@ with damage or power** can roll one rarity:
 - Protected items can still be placed in houses.
 - Inventory item destruction no longer asks for confirmation; protected items are rejected by the server.
 - Requires the matching server restart and launcher 1.0.17 client update. Live game acceptance remains pending.
+
+- **Junk dealer quick sales:** Double-click a listed item to sell that item, or use Sell. Sell All stays separate; item protection still applies. Requires the matching server restart; no client update is needed.
