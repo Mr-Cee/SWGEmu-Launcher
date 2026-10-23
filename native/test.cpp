@@ -10,6 +10,7 @@ static bool __fastcall FakeMessage(void*,void*,void*,const void*){forwarded++;re
 static const char* testAccount="";static void* focusedControl;
 static const char* __cdecl FakeAccount(){return testAccount;}
 static void __fastcall FakeFocus(void* self,void*){focusedControl=self;}
+#include "JunkDealerDoubleClickTests.h"
 int main(){
  nativeQueue=FakeQueue;nativeButton=(Button)FakeButton;nativeClose=(void(__thiscall*)(void*))FakeClose;trampoline=(void*)FakeMessage;
  BYTE self[0x200]{};int destination,purchase;void* elements[]={&destination};void* vector[]={elements,elements+1,elements+1};*(void***)(self+0xe0)=vector;*(void**)(self+0xa8)=&purchase;
@@ -93,6 +94,7 @@ int main(){
  assert(!InstallInstantItemDestroy(destroyFake));assert(!memcmp(destroyBefore,destroyFake+itemDestroyConfirmRva,sizeof(destroyBefore)));
  VirtualFree(destroyFake,0,MEM_RELEASE);
  std::cout<<"PASS: inventory destroy uses the native confirmed path, preserves adjacent instructions, targets the original request path, is idempotent and rejects mismatched signatures.\n";
+ TestJunkDoubleClick();
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";
 }
