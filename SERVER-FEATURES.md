@@ -211,6 +211,7 @@ with damage or power** can roll one rarity:
 - Companions copy the owner's vehicle or creature mount for following and mounting.
   Their temporary copies remain companion equipment.
 - Combat abilities come from learned skill boxes and must match the selected weapon.
+- Companion skill windows hide internal `private_` progression markers, showing real granted commands and certifications. This is a display correction across all professions; learned abilities and combat behavior are unchanged.
 - **Squad Leader companions** use a carbine and progress from novice through their native skill tree using carbine XP. They automatically use learned Form Up, Rally, Steady Aim, emergency Retreat, Boost Morale, and Volley Fire when needed. Eligible players and companions receive planet-wide support; passive bonuses use one strongest provider without stacking. Normal contract prices apply. Available after the server restart; no client update.
 - Doctors and Combat Medics support nearby group players and companions.
 - Combat Medics prioritize the **lowest health percentage** eligible group patient
