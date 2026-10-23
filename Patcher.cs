@@ -11,7 +11,7 @@ public static partial class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint", "instant-item-destroy", "junk-dealer-double-click"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint", "instant-item-destroy", "junk-dealer-double-click", "entertainer-healing-crafting"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -19,7 +19,7 @@ public static partial class Patcher
             ?? throw new InvalidDataException("Empty patch manifest.");
         if (m.SchemaVersion != 1 || string.IsNullOrWhiteSpace(m.Version) || m.Patches is null || m.Patches.Any(p => !Supported.Contains(p)))
             throw new InvalidDataException("These patches need a newer launcher. Select Update launcher to install the latest release.");
-        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 18))
+        if (!System.Version.TryParse(m.MinimumLauncherVersion, out var minimum) || minimum > new System.Version(1, 0, 19))
             throw new InvalidDataException("Select Update launcher before applying these patches.");
         return m;
     }
@@ -337,13 +337,13 @@ public static partial class Patcher
         if (!verifyOnly && IsGameRunning(client)) throw new IOException("Close all game windows before installing updates.");
         var pending = new Dictionary<string, byte[]>();
         if (manifest.Patches.Contains("companion-rider-animations")) {
-            log("Preparing companion mount supportÃ¢â‚¬Â¦");
+            log("Preparing companion mount supportÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦");
             foreach (string resource in new[] { "object/mobile/shared_dressed_brawler_trainer_01.iff", "object/mobile/shared_dressed_doctor_trainer_human_female_01.iff" })
                 pending[resource] = CompanionRider(Resource(client, resource));
         }
-        if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversationsÃ¢â‚¬Â¦"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
+        if (manifest.Patches.Contains("mounted-conversations")) { log("Preparing mounted NPC conversationsÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"); pending["datatables/command/command_table.iff"] = MountedConversations(Resource(client, "datatables/command/command_table.iff")); }
         if (manifest.Patches.Contains("area-corpse-commands")) {
-            log("Preparing area loot and harvest commandsÃ¢â‚¬Â¦");
+            log("Preparing area loot and harvest commandsÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦");
             const string commandTable = "datatables/command/command_table.iff";
             pending[commandTable] = AreaCommands(pending.TryGetValue(commandTable, out var table) ? table : Resource(client, commandTable));
         }
@@ -367,22 +367,37 @@ public static partial class Patcher
             pending["dinput8.dll"] = payload;
         }
 
-        if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routesÃ¢â‚¬Â¦"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
-        if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skillsÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
+        if (manifest.Patches.Contains("galaxy-wide-travel")) { log("Preparing galaxy-wide travel routesÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"); pending["datatables/travel/travel.iff"] = TravelFares(Resource(client, "datatables/travel/travel.iff")); }
+        if (manifest.Patches.Contains("free-crafting-skills")) { log("Preparing free crafting skillsÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦"); pending["datatables/skill/skills.iff"] = SkillCosts(Resource(client, "datatables/skill/skills.iff")); }
         if (manifest.Patches.Contains("free-force-sensitive-skills")) {
-            log("Preparing free Force Sensitive skill pointsÃ¢â‚¬Â¦");
+            log("Preparing free Force Sensitive skill pointsÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦");
             const string skills = "datatables/skill/skills.iff";
             pending[skills] = ForceSensitiveCosts(pending.TryGetValue(skills, out var table) ? table : Resource(client, skills));
         }
-        if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being iconÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
+        if (manifest.Patches.Contains("center-of-being-icon")) { log("Preparing Center of Being iconÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦"); pending["datatables/modifiers/modifiers.iff"] = BuffIcon(Resource(client, "datatables/modifiers/modifiers.iff")); }
         if (manifest.Patches.Contains("combat-master-sprint")) {
-            log("Preparing combat master Sprint abilityÃ¢â‚¬Â¦");
+            log("Preparing combat master Sprint abilityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦");
             byte[] Current(string path) => pending.TryGetValue(path, out var value) ? value : Resource(client,path);
             const string skills="datatables/skill/skills.iff", commands="datatables/command/command_table.iff", modifiers="datatables/modifiers/modifiers.iff";
             pending[skills]=SprintSkills(Current(skills)); pending[commands]=SprintCommands(Current(commands)); pending[modifiers]=SprintModifiers(Current(modifiers));
             pending["ui/ui_styles.inc"]=SprintIcons(Current("ui/ui_styles.inc"));
             pending["string/en/cmd_n.stf"]=SprintStrings(Current("string/en/cmd_n.stf"),"Sprint");
             pending["string/en/cmd_d.stf"]=SprintStrings(Current("string/en/cmd_d.stf"),"Run 30% faster on foot for 30 seconds. Cooldown: 60 seconds from activation. Granted by combat master skill boxes. Mounting ends Sprint.");
+        }
+        if (manifest.Patches.Contains("entertainer-healing-crafting")) {
+            log("Preparing solo entertainer healing crafting recipes…");
+            byte[] CurrentTraining(string path)=>pending.TryGetValue(path,out var value)?value:Resource(client,path);
+            byte[] draft=Resource(client,"object/draft_schematic/instrument/shared_instrument_slitherhorn.iff");
+            byte[] item=Resource(client,"object/tangible/instrument/shared_slitherhorn.iff");
+            for(int tier=1;tier<=2;tier++){
+                pending[TrainingDraft(tier)]=TrainingTemplate(draft,tier,true);
+                pending[TrainingItem(tier)]=TrainingTemplate(item,tier,false);
+            }
+            pending[TrainingStringsPath]=TrainingStrings();
+            pending[TrainingCrcPath]=TrainingCrcTable(CurrentTraining(TrainingCrcPath));
+            pending[TrainingGroupsPath]=TrainingGroups(CurrentTraining(TrainingGroupsPath));
+            const string trainingSkills="datatables/skill/skills.iff";
+            pending[trainingSkills]=TrainingSkills(CurrentTraining(trainingSkills));
         }
         var lines = ConfigLines(client); int priority = 26;
         foreach (var line in lines)

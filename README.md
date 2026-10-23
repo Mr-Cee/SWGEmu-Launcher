@@ -22,6 +22,9 @@ owner's login configuration. Existing login settings and saved preferences are p
 
 ## Included patches
 
+- Solo entertainer healing crafting recipes: 500 base XP at Novice Entertainer; 1,000 at either Novice Dancer or Novice Musician. Requires the matching server update.
+
+
 - Free crafting professions: the client skill point costs match the private server.
 - Center of Being: adds its existing icon and server-provided duration to the buff display.
 - Waypoint monitor: enabled for fresh preferences; saved choices can override this default.

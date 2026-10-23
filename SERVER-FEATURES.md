@@ -1,6 +1,6 @@
 # Server features and changes
 
-Updated October 22, 2026.
+Updated October 23, 2026.
 
 A player-friendly overview of the customizations implemented for this private
 SWGEmu server. Values below describe the current configured rules. Newer server
@@ -9,6 +9,9 @@ some in-game checks are still pending. Client features require the current
 launcher and its client updates.
 
 ## Characters, skills, and experience
+
+- **Solo entertainer healing crafting:** Slitherhorn [Ent Heal EXP] unlocks at Novice Entertainer and awards **500 base healing XP** for **30 + 15 metal**. Slitherhorn II [Ent Heal EXP] unlocks at either Novice Dancer or Novice Musician and awards **1,000 base healing XP** for **45 + 23 metal**. Existing entertainer XP bonuses apply. These are training props and cannot play music. Requires launcher **1.0.19**, its client update, and the updated server.
+
 
 - **10 characters per account** in this galaxy, with up to **4 online at once**.
 - New characters start with **25,000 bank credits**, **1,000 cash credits**, and a
