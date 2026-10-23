@@ -221,9 +221,10 @@ with damage or power** can roll one rarity:
   Medical crafting XP requirements become **healing/medical XP**.
 - Doctor and Combat Medic companions receive a **30x medical XP multiplier**,
   retaining normal eligibility rules and XP caps.
-- **Bounty Hunter and Commando companions have a Choose Weapon radial option**,
-  with alternatives unlocked through their learned certifications.
-- Bounty Hunters can choose their launcher pistol or carbine. Commandos can use
+- **Give Weapon** appears on every companion's owner radial menu. Choose a compatible, certified weapon from your main inventory; the companion equips that actual item and returns its previous weapon to you. Its rolled stats, rarity, slicing and condition persist through storage, recall and skill training.
+- **Take back current weapon** returns it without a replacement and leaves the companion unarmed. A contract holding a supplied weapon cannot be deleted until you take it back. Both characters must be conscious, unmounted and out of combat.
+- Bounty Hunter and Commando weapon changes now require supplying the alternate weapon manually, replacing the free Choose Weapon menu. Swaps preserve each contract's original profession XP pool. Requires a server restart; no client update.
+- Bounty Hunters accept pistols or carbines. Commandos can use
   flamethrowers, acid rifles, heavy particle beams, lightning beams, rocket launchers,
   and heavy acid beams.
 - Commandos automatically use **reusable grenades**, choosing the highest unlocked
