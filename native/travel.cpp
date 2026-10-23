@@ -126,8 +126,139 @@ static bool InstallInstantItemDestroy(BYTE* base){
  if(memcmp(site+5,expected+5,sizeof(confirmed)))return false;
  return Patch(site+5,confirmed,sizeof(confirmed));
 }
+
+// The stock pre-CU toolbar already supports arbitrary slot indices for mouse
+// input, drag/drop, execution, and settings.  Its saved pane shape defaults to
+// 24 entries, though, and the double-row UI is only tall enough for those 24.
+// Keep the native implementation and expand its eight panes to 36 entries.
+// Slots 24-35 intentionally are not registered as toolbarSlot## actions, so the
+// added row is mouse-only while still accepting abilities and macros.
+constexpr uintptr_t toolbarLoadRva=0xb690b0,toolbarSaveRva=0xb68900,toolbarUpdateRva=0xb69890;
+constexpr uintptr_t settingsSaveIntegerRva=0x5cd140,stringCtorRva=0x6e20,stringAssignRva=0x15be0,stringDtorRva=0x16b0;
+constexpr uintptr_t widgetSetSizeRva=0xd061e0,numPanesKeyRva=0x1580448;
+constexpr size_t toolbarLoadPatchLength=6,toolbarSavePatchLength=10;
+struct ToolbarVector{BYTE* begin;BYTE* end;BYTE* capacity;};
+enum class ToolbarShape{Complete,NeedsExpansion,Unreadable};
+struct Detour{BYTE* target;BYTE original[16];size_t length;void* trampoline;};
+using ToolbarProcedure=void(__thiscall*)(void*);
+using SettingsSaveInteger=void(__cdecl*)(void*,const void*,int);
+using GameStringCtor=void*(__thiscall*)(void*,const char*);
+using GameStringAssign=void(__thiscall*)(void*,const char*,const char*);
+using GameStringDtor=void(__thiscall*)(void*);
+using WidgetSetSize=void(__thiscall*)(void*,const long*);
+static ToolbarProcedure nativeToolbarLoad,nativeToolbarSave;
+static SettingsSaveInteger nativeSettingsSaveInteger;
+static GameStringCtor nativeStringCtor;
+static GameStringAssign nativeStringAssign;
+static GameStringDtor nativeStringDtor;
+static WidgetSetSize nativeWidgetSetSize;
+static ToolbarProcedure nativeToolbarUpdate;
+static const void* numPanesKey;
+static thread_local bool toolbarHealing;
+static Detour toolbarLoadDetour{},toolbarSaveDetour{};
+
+static ToolbarShape InspectToolbarShape(void* self){
+ if(!Readable(self,0xa4))return ToolbarShape::Unreadable;
+ auto panes=*reinterpret_cast<ToolbarVector**>((BYTE*)self+0xa0);
+ if(!Readable(panes,sizeof(*panes))||panes->end<panes->begin)return ToolbarShape::Unreadable;
+ uintptr_t bytes=(uintptr_t)panes->end-(uintptr_t)panes->begin;
+ if(bytes%sizeof(ToolbarVector))return ToolbarShape::Unreadable;
+ size_t count=bytes/sizeof(ToolbarVector);
+ if(count<8)return ToolbarShape::NeedsExpansion;
+ if(!Readable(panes->begin,8*sizeof(ToolbarVector)))return ToolbarShape::Unreadable;
+ auto rows=reinterpret_cast<ToolbarVector*>(panes->begin);
+ for(size_t i=0;i<8;i++){
+  if(rows[i].end<rows[i].begin)return ToolbarShape::Unreadable;
+  uintptr_t rowBytes=(uintptr_t)rows[i].end-(uintptr_t)rows[i].begin;
+  if(rowBytes%0x48)return ToolbarShape::Unreadable;
+  if(rowBytes/0x48<36)return ToolbarShape::NeedsExpansion;
+ }
+ return ToolbarShape::Complete;
+}
+
+static bool SaveToolbarShape(void* self){
+ if(!self||!nativeSettingsSaveInteger||!nativeStringCtor||!nativeStringAssign||!nativeStringDtor||!numPanesKey)return false;
+ nativeSettingsSaveInteger((BYTE*)self+4,numPanesKey,8);
+ for(int pane=0;pane<8;pane++){
+  char name[16];int length=wsprintfA(name,"numItems_%d",pane);
+  if(length<=0||length>=(int)sizeof(name))return false;
+  alignas(16) BYTE gameString[32]{};
+  const char empty=0;
+  nativeStringCtor(gameString,&empty);
+  nativeStringAssign(gameString,name,name+length);
+  nativeSettingsSaveInteger((BYTE*)self+4,gameString,36);
+  nativeStringDtor(gameString);
+ }
+ return true;
+}
+
+static void ResizeThirdToolbar(void* self){
+ if(!Readable(self,0x9c)||!nativeWidgetSetSize||!nativeToolbarUpdate)return;
+ void* slots=*reinterpret_cast<void**>((BYTE*)self+0x10);
+ void* backgrounds=*reinterpret_cast<void**>((BYTE*)self+0x98);
+ if(!Readable(slots,0xac)||!Readable(backgrounds,0x3c))return;
+ *reinterpret_cast<long*>((BYTE*)slots+0xa8)=116;
+ long slotSize[2]={*reinterpret_cast<long*>((BYTE*)slots+0x34),116};
+ long backgroundSize[2]={*reinterpret_cast<long*>((BYTE*)backgrounds+0x34),98};
+ if(slotSize[0]<412)slotSize[0]=412;
+ if(backgroundSize[0]<450)backgroundSize[0]=450;
+ nativeWidgetSetSize(slots,slotSize);
+ nativeWidgetSetSize(backgrounds,backgroundSize);
+ nativeToolbarUpdate(self);
+}
+
+static void __fastcall ToolbarLoadHook(void* self,void*){
+ nativeToolbarLoad(self);
+ if(toolbarHealing)return;
+ auto shape=InspectToolbarShape(self);
+ if(shape==ToolbarShape::Complete){ResizeThirdToolbar(self);return;}
+ if(shape==ToolbarShape::Unreadable){Log("Third toolbar: toolbar settings could not be inspected; stock layout retained.");return;}
+ toolbarHealing=true;
+ bool saved=SaveToolbarShape(self);
+ if(saved)nativeToolbarLoad(self);
+ toolbarHealing=false;
+ if(saved&&InspectToolbarShape(self)==ToolbarShape::Complete){ResizeThirdToolbar(self);Log("Third toolbar: eight panes expanded to 36 clickable slots.");}
+ else Log("Third toolbar: settings expansion failed; stock layout retained.");
+}
+static void __fastcall ToolbarSaveHook(void* self,void*){
+ if(InspectToolbarShape(self)==ToolbarShape::NeedsExpansion){Log("Third toolbar: prevented a truncated toolbar settings save.");return;}
+ nativeToolbarSave(self);
+}
+static bool CreateDetour(Detour& d,BYTE* target,const BYTE* expected,size_t length,void* hook){
+ if(length<5||length>sizeof(d.original)||!Readable(target,length)||memcmp(target,expected,length))return false;
+ BYTE* t=(BYTE*)VirtualAlloc(nullptr,length+5,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);if(!t)return false;
+ memcpy(t,target,length);t[length]=0xe9;*(int32_t*)(t+length+1)=(int32_t)((target+length)-(t+length+5));
+ DWORD old;if(!VirtualProtect(t,length+5,PAGE_EXECUTE_READ,&old)){VirtualFree(t,0,MEM_RELEASE);return false;}
+ BYTE replacement[16];memset(replacement,0x90,length);replacement[0]=0xe9;*(int32_t*)(replacement+1)=(int32_t)((BYTE*)hook-(target+5));
+ memcpy(d.original,target,length);d.target=target;d.length=length;d.trampoline=t;
+ if(Patch(target,replacement,length))return true;
+ VirtualFree(t,0,MEM_RELEASE);d={};return false;
+}
+static void RemoveDetour(Detour& d){if(d.target&&d.length)Patch(d.target,d.original,d.length);if(d.trampoline)VirtualFree(d.trampoline,0,MEM_RELEASE);d={};}
+static bool InstallThirdToolbar(BYTE* base){
+ const BYTE loadExpected[]={0x53,0x8b,0xdc,0x83,0xec,0x08};
+ const BYTE saveExpected[]={0x55,0x8b,0xec,0x6a,0xff,0x68,0x97,0x8b,0x56,0x01};
+ const BYTE updateExpected[]={0x55,0x8b,0xec,0x6a,0xff,0x68};
+ const BYTE saveIntegerExpected[]={0x55,0x8b,0xec,0x8b,0x45,0x08};
+ const BYTE ctorExpected[]={0x55,0x8b,0xec,0x8b,0x45,0x08};
+ const BYTE assignExpected[]={0x55,0x8b,0xec,0x53,0x56,0x57};
+ const BYTE dtorExpected[]={0x55,0x8b,0xec,0x6a,0xff,0x68};
+ const BYTE sizeExpected[]={0x55,0x8b,0xec,0x83,0xec,0x10};
+ if(!Readable(base+numPanesKeyRva,24)||memcmp(base+toolbarUpdateRva,updateExpected,sizeof(updateExpected))||
+    memcmp(base+settingsSaveIntegerRva,saveIntegerExpected,sizeof(saveIntegerExpected))||memcmp(base+stringCtorRva,ctorExpected,sizeof(ctorExpected))||
+    memcmp(base+stringAssignRva,assignExpected,sizeof(assignExpected))||memcmp(base+stringDtorRva,dtorExpected,sizeof(dtorExpected))||
+    memcmp(base+widgetSetSizeRva,sizeExpected,sizeof(sizeExpected)))return false;
+ nativeSettingsSaveInteger=(SettingsSaveInteger)(base+settingsSaveIntegerRva);nativeStringCtor=(GameStringCtor)(base+stringCtorRva);
+ nativeStringAssign=(GameStringAssign)(base+stringAssignRva);nativeStringDtor=(GameStringDtor)(base+stringDtorRva);
+ nativeWidgetSetSize=(WidgetSetSize)(base+widgetSetSizeRva);nativeToolbarUpdate=(ToolbarProcedure)(base+toolbarUpdateRva);numPanesKey=base+numPanesKeyRva;
+ if(!CreateDetour(toolbarLoadDetour,base+toolbarLoadRva,loadExpected,sizeof(loadExpected),(void*)&ToolbarLoadHook))return false;
+ nativeToolbarLoad=(ToolbarProcedure)toolbarLoadDetour.trampoline;
+ if(!CreateDetour(toolbarSaveDetour,base+toolbarSaveRva,saveExpected,sizeof(saveExpected),(void*)&ToolbarSaveHook)){RemoveDetour(toolbarLoadDetour);nativeToolbarLoad=nullptr;return false;}
+ nativeToolbarSave=(ToolbarProcedure)toolbarSaveDetour.trampoline;
+ return true;
+}
 #include "JunkDealerDoubleClick.h"
-static BOOL CALLBACK Initialize(PINIT_ONCE,PVOID,PVOID*){wchar_t path[MAX_PATH];UINT n=GetSystemDirectoryW(path,MAX_PATH);if(!n||n+13>=MAX_PATH)return TRUE;wcscat_s(path,L"\\dinput8.dll");systemInput=LoadLibraryW(path);image=(BYTE*)GetModuleHandleW(nullptr);auto dos=(IMAGE_DOS_HEADER*)image;if(dos->e_magic!=IMAGE_DOS_SIGNATURE)return TRUE;auto nt=(IMAGE_NT_HEADERS32*)(image+dos->e_lfanew);const BYTE msg[]={0x55,0x8b,0xec,0x8b,0x45,0x08},button[]={0x55,0x8b,0xec,0x6a,0xff},call[]={0xe8,0xa0,0x9a,0x6e,0xff};if(nt->FileHeader.Machine!=IMAGE_FILE_MACHINE_I386||nt->OptionalHeader.SizeOfImage!=0x15bf000||memcmp(image+msgRva,msg,6)||memcmp(image+buttonRva,button,5)||memcmp(image+callRva,call,5)||memcmp(image+0x984bc3,"\x3b\xbe\xd8\x00\x00\x00",6)||memcmp(image+0x984bcf,"\x8b\x96\x18\x01\x00\x00\x8b\x86\x1c\x01\x00\x00",12)){Log("Unsupported client signatures. Travel extension disabled; normal input preserved.");return TRUE;}BYTE* t=(BYTE*)VirtualAlloc(nullptr,16,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);if(!t)return TRUE;memcpy(t,msg,6);t[6]=0xe9;*(int32_t*)(t+7)=(int32_t)((image+msgRva+6)-(t+11));DWORD old;if(!VirtualProtect(t,16,PAGE_EXECUTE_READ,&old)){VirtualFree(t,0,MEM_RELEASE);return TRUE;}trampoline=t;nativeButton=(Button)(image+buttonRva);nativeQueue=(Queue)(image+queueRva);nativeClose=(void(__thiscall*)(void*))(image+closeRva);BYTE c[5]={0xe8};*(int32_t*)(c+1)=(int32_t)((BYTE*)&QueueHook-(image+callRva+5));BYTE j[6]={0xe9,0,0,0,0,0x90};*(int32_t*)(j+1)=(int32_t)((BYTE*)&MessageHook-(image+msgRva+5));if(!Patch(image+callRva,c,5))return TRUE;if(!Patch(image+msgRva,j,6)){Patch(image+callRva,call,5);return TRUE;}if(InstallInstantMissionAccept(image))Log("Mission accept confirmation disabled; normal server validation retained.");else Log("Mission accept signature unsupported; native confirmation retained.");if(InstallLoginPasswordFocus(image))Log("Login focus: password for a saved account, username otherwise.");else Log("Login focus signatures unsupported; native focus retained.");if(InstallRelaxedPlacement(image))Log("Structure placement preview uses terrain height; server validates the final site.");else Log("Structure placement height signature unsupported; native height retained.");if(InstallInstantItemDestroy(image))Log("Inventory destruction confirmation disabled; server item protection retained.");else Log("Item destruction signature unsupported; native confirmation retained.");if(InstallJunkDoubleClick(image))Log("Junk dealer double-click handler installed for marked sale windows.");else Log("Junk dealer signatures unsupported; normal list handling retained.");Log("Private travel extension 1.7: map double-click installed. Server validates the one-way fare.");return TRUE;}
+static BOOL CALLBACK Initialize(PINIT_ONCE,PVOID,PVOID*){wchar_t path[MAX_PATH];UINT n=GetSystemDirectoryW(path,MAX_PATH);if(!n||n+13>=MAX_PATH)return TRUE;wcscat_s(path,L"\\dinput8.dll");systemInput=LoadLibraryW(path);image=(BYTE*)GetModuleHandleW(nullptr);auto dos=(IMAGE_DOS_HEADER*)image;if(dos->e_magic!=IMAGE_DOS_SIGNATURE)return TRUE;auto nt=(IMAGE_NT_HEADERS32*)(image+dos->e_lfanew);const BYTE msg[]={0x55,0x8b,0xec,0x8b,0x45,0x08},button[]={0x55,0x8b,0xec,0x6a,0xff},call[]={0xe8,0xa0,0x9a,0x6e,0xff};if(nt->FileHeader.Machine!=IMAGE_FILE_MACHINE_I386||nt->OptionalHeader.SizeOfImage!=0x15bf000||memcmp(image+msgRva,msg,6)||memcmp(image+buttonRva,button,5)||memcmp(image+callRva,call,5)||memcmp(image+0x984bc3,"\x3b\xbe\xd8\x00\x00\x00",6)||memcmp(image+0x984bcf,"\x8b\x96\x18\x01\x00\x00\x8b\x86\x1c\x01\x00\x00",12)){Log("Unsupported client signatures. Travel extension disabled; normal input preserved.");return TRUE;}BYTE* t=(BYTE*)VirtualAlloc(nullptr,16,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);if(!t)return TRUE;memcpy(t,msg,6);t[6]=0xe9;*(int32_t*)(t+7)=(int32_t)((image+msgRva+6)-(t+11));DWORD old;if(!VirtualProtect(t,16,PAGE_EXECUTE_READ,&old)){VirtualFree(t,0,MEM_RELEASE);return TRUE;}trampoline=t;nativeButton=(Button)(image+buttonRva);nativeQueue=(Queue)(image+queueRva);nativeClose=(void(__thiscall*)(void*))(image+closeRva);BYTE c[5]={0xe8};*(int32_t*)(c+1)=(int32_t)((BYTE*)&QueueHook-(image+callRva+5));BYTE j[6]={0xe9,0,0,0,0,0x90};*(int32_t*)(j+1)=(int32_t)((BYTE*)&MessageHook-(image+msgRva+5));if(!Patch(image+callRva,c,5))return TRUE;if(!Patch(image+msgRva,j,6)){Patch(image+callRva,call,5);return TRUE;}if(InstallInstantMissionAccept(image))Log("Mission accept confirmation disabled; normal server validation retained.");else Log("Mission accept signature unsupported; native confirmation retained.");if(InstallLoginPasswordFocus(image))Log("Login focus: password for a saved account, username otherwise.");else Log("Login focus signatures unsupported; native focus retained.");if(InstallRelaxedPlacement(image))Log("Structure placement preview uses terrain height; server validates the final site.");else Log("Structure placement height signature unsupported; native height retained.");if(InstallInstantItemDestroy(image))Log("Inventory destruction confirmation disabled; server item protection retained.");else Log("Item destruction signature unsupported; native confirmation retained.");if(InstallJunkDoubleClick(image))Log("Junk dealer double-click handler installed for marked sale windows.");else Log("Junk dealer signatures unsupported; normal list handling retained.");if(InstallThirdToolbar(image))Log("Third toolbar runtime installed: 36 native mouse-clickable slots per pane.");else Log("Third toolbar signatures unsupported; stock two-row toolbar retained.");Log("Private client extension 1.8: map travel and interface updates installed.");return TRUE;}
 static FARPROC Proc(const char* n){InitOnceExecuteOnce(&once,Initialize,nullptr,nullptr);return systemInput?GetProcAddress(systemInput,n):nullptr;}
 extern "C" HRESULT WINAPI DirectInput8Create(HINSTANCE h,DWORD v,REFIID i,LPVOID* o,LPUNKNOWN u){auto p=Proc("DirectInput8Create");return p?((HRESULT(WINAPI*)(HINSTANCE,DWORD,REFIID,LPVOID*,LPUNKNOWN))p)(h,v,i,o,u):E_FAIL;}
 extern "C" HRESULT WINAPI DllCanUnloadNow(){auto p=Proc("DllCanUnloadNow");return p?((HRESULT(WINAPI*)())p)():S_FALSE;}

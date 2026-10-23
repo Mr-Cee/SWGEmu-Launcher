@@ -1,6 +1,7 @@
 #include "travel.cpp"
 #include <cassert>
 #include <iostream>
+#include <vector>
 static int nativeCalls,forwarded,closed;static std::wstring received;static uint32_t receivedCommand;static const void* receivedTarget;static int terminal;
 static uint32_t __cdecl FakeQueue(uint32_t command,const void* target,const NativeWide* text,int,int){nativeCalls++;receivedCommand=command;receivedTarget=target;received.assign(text->first,text->last);return 1;}
 static void __fastcall FakeClose(void*,void*);
@@ -10,6 +11,13 @@ static bool __fastcall FakeMessage(void*,void*,void*,const void*){forwarded++;re
 static const char* testAccount="";static void* focusedControl;
 static const char* __cdecl FakeAccount(){return testAccount;}
 static void __fastcall FakeFocus(void* self,void*){focusedControl=self;}
+static std::string fakeToolbarKey;static std::vector<std::pair<std::string,int>> fakeToolbarSettings;static long fakeSlotSize[2],fakeBackgroundSize[2];static void* fakeSlots;static int fakeToolbarUpdates;
+static void* __fastcall FakeStringCtor(void* self,void*,const char*){fakeToolbarKey.clear();return self;}
+static void __fastcall FakeStringAssign(void*,void*,const char* first,const char* last){fakeToolbarKey.assign(first,last);}
+static void __fastcall FakeStringDtor(void*,void*){}
+static void __cdecl FakeSaveInteger(void*,const void* key,int value){fakeToolbarSettings.emplace_back(key==numPanesKey?"numPanes":fakeToolbarKey,value);}
+static void __fastcall FakeWidgetSetSize(void* self,void*,const long* size){long* target=self==fakeSlots?fakeSlotSize:fakeBackgroundSize;target[0]=size[0];target[1]=size[1];}
+static void __fastcall FakeToolbarUpdate(void*,void*){fakeToolbarUpdates++;}
 #include "JunkDealerDoubleClickTests.h"
 int main(){
  nativeQueue=FakeQueue;nativeButton=(Button)FakeButton;nativeClose=(void(__thiscall*)(void*))FakeClose;trampoline=(void*)FakeMessage;
@@ -94,6 +102,20 @@ int main(){
  assert(!InstallInstantItemDestroy(destroyFake));assert(!memcmp(destroyBefore,destroyFake+itemDestroyConfirmRva,sizeof(destroyBefore)));
  VirtualFree(destroyFake,0,MEM_RELEASE);
  std::cout<<"PASS: inventory destroy uses the native confirmed path, preserves adjacent instructions, targets the original request path, is idempotent and rejects mismatched signatures.\n";
+ BYTE toolbar[0xb0]{};ToolbarVector panes[8]{};BYTE rowStorage[8][36*0x48]{};ToolbarVector outer{(BYTE*)panes,(BYTE*)(panes+8),(BYTE*)(panes+8)};*(ToolbarVector**)(toolbar+0xa0)=&outer;
+ for(int i=0;i<8;i++)panes[i]={(BYTE*)rowStorage[i],(BYTE*)rowStorage[i]+24*0x48,(BYTE*)rowStorage[i]+36*0x48};
+ assert(InspectToolbarShape(toolbar)==ToolbarShape::NeedsExpansion);
+ for(int i=0;i<8;i++)panes[i].end=panes[i].begin+36*0x48;
+ assert(InspectToolbarShape(toolbar)==ToolbarShape::Complete);
+ panes[3].end++;assert(InspectToolbarShape(toolbar)==ToolbarShape::Unreadable);panes[3].end--;
+ nativeSettingsSaveInteger=FakeSaveInteger;nativeStringCtor=(GameStringCtor)FakeStringCtor;nativeStringAssign=(GameStringAssign)FakeStringAssign;nativeStringDtor=(GameStringDtor)FakeStringDtor;
+ int panesMarker;numPanesKey=&panesMarker;fakeToolbarSettings.clear();assert(SaveToolbarShape(toolbar));assert(fakeToolbarSettings.size()==9);
+ assert(fakeToolbarSettings[0]==std::make_pair(std::string("numPanes"),8));
+ for(int i=0;i<8;i++)assert(fakeToolbarSettings[i+1]==std::make_pair(std::string("numItems_")+char('0'+i),36));
+ BYTE slots[0xb0]{},backgrounds[0xb0]{};*(void**)(toolbar+0x10)=slots;*(void**)(toolbar+0x98)=backgrounds;*(long*)(slots+0x34)=300;*(long*)(backgrounds+0x34)=500;
+ fakeSlots=slots;fakeToolbarUpdates=0;nativeWidgetSetSize=(WidgetSetSize)FakeWidgetSetSize;nativeToolbarUpdate=(ToolbarProcedure)FakeToolbarUpdate;ResizeThirdToolbar(toolbar);
+ assert(*(long*)(slots+0xa8)==116&&fakeSlotSize[0]==412&&fakeSlotSize[1]==116&&fakeBackgroundSize[0]==500&&fakeBackgroundSize[1]==98&&fakeToolbarUpdates==1);
+ std::cout<<"PASS: third toolbar detects 24/36-slot panes, writes eight 36-slot settings, and expands both native UI rows without command-action registration.\n";
  TestJunkDoubleClick();
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";

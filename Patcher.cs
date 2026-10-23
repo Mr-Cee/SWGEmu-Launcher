@@ -11,7 +11,7 @@ public static partial class Patcher
 {
     public const string ManifestUrl = "https://raw.githubusercontent.com/Mr-Cee/SWGEmu-Launcher/main/patches/manifest.json";
     public const string ReleasesUrl = "https://github.com/Mr-Cee/SWGEmu-Launcher/releases/latest";
-    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint", "instant-item-destroy", "junk-dealer-double-click", "entertainer-healing-crafting"];
+    public static readonly string[] Supported = ["center-of-being-icon", "free-crafting-skills", "waypoint-monitor-default", "galaxy-wide-travel", "map-double-click-travel", "mounted-conversations", "multiple-instances", "area-corpse-commands", "free-force-sensitive-skills", "instant-mission-accept", "companion-rider-animations", "saved-account-password-focus", "relaxed-structure-placement", "combat-master-sprint", "instant-item-destroy", "junk-dealer-double-click", "entertainer-healing-crafting", "third-toolbar"];
     public static PatchManifest Parse(string text)
     {
         if (text.Length > 65536) throw new InvalidDataException("Patch manifest is too large.");
@@ -347,8 +347,9 @@ public static partial class Patcher
             const string commandTable = "datatables/command/command_table.iff";
             pending[commandTable] = AreaCommands(pending.TryGetValue(commandTable, out var table) ? table : Resource(client, commandTable));
         }
-        if (manifest.Patches.Contains("map-double-click-travel") || manifest.Patches.Contains("instant-mission-accept") || manifest.Patches.Contains("relaxed-structure-placement"))
+        if (manifest.Patches.Contains("map-double-click-travel") || manifest.Patches.Contains("instant-mission-accept") || manifest.Patches.Contains("relaxed-structure-placement") || manifest.Patches.Contains("third-toolbar"))
         {
+            if (manifest.Patches.Contains("third-toolbar")) log("Preparing third toolbar row…");
             string executableHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(client, "SWGEmu.exe"))));
             if (executableHash != "58012E57CEBC499454812BA7ED96B1289DB01E520963B4FC364EDB41C322B2A8")
                 throw new InvalidDataException("This game executable is not supported by the map double-click extension. Client files were not changed.");
@@ -363,7 +364,8 @@ public static partial class Patcher
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "4479CB8D5AF9551E6C2BB701E850953BE5904E3FE494316EB16A7D728CB72B3F" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "FCAE3562EF9D658C26945DF4201F9BA0FFE6CD60B4857DDE53E01025055EF625" &&
                 Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "5AA5F7CBA5141436C44069D1F2535821520C33B4D63FCC38676FF8796E210102" &&
-                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "62956C5EEC8464FB9D37D0DCF4737839669555931A9B1DFF49CCEC4CC246A030"))
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "62956C5EEC8464FB9D37D0DCF4737839669555931A9B1DFF49CCEC4CC246A030" &&
+                Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(installed))) != "C0BE5F25CBF4C38F62D4A639F9EF5D9CCD7E96C37A0B4BB37BCF83B2CFF2A69B"))
                 throw new InvalidDataException("A different dinput8.dll is already installed. It must be reviewed before adding the travel extension.");
             pending["dinput8.dll"] = payload;
         }
