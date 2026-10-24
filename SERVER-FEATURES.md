@@ -519,3 +519,14 @@ storage limits govern purchases; refused stock stays with Rook. Purchased
 materials feed her existing stimpack recipes. His resources and harvest/sales
 counters persist, and his status conversation reports them. Player loot claims
 are respected. Requires a server restart; no client update or launcher download.
+
+### Harvesting progression and Taren's resource supplies
+
+Rook earns Scout XP from successful harvesting and buys native Hunting I-IV
+skills with the required XP and credits while continuing toward Master TKA.
+His status reports Scout XP, harvesting skill and the next training cost.
+Taren now sells surplus resources through **Browse resource supplies**: eight
+units for 24 credits, retaining their actual quality. Stock is finite and shared
+with the workshop; 32 organic and 32 inorganic units stay reserved for crafting.
+Purchases pay Taren's saved wallet from your cash, then bank. Requires a server
+restart only; no client update or launcher download.
