@@ -17,16 +17,20 @@ launcher and its client updates.
   200 credits). Mira now consumes the native Stimpack A recipe's **8 organic + 8
   inorganic** units and stores a finished pack before selling it for 500 credits.
   Ingredient quality and citizen rank affect its stats; buying never rerolls them.
-  Taren samples real active local resources where available. Lio visibly performs
-  the game's continuous Basic dance while working and stops before walking away.
-  Qualified doctors and entertainers provide the existing one-hour buff packages
-  for 2,500 credits, paid into their own wallets; doctors consume crafted supplies.
-  Inspect work and progress through their radial menus. Existing wallets, ranks
-  and completed pilot stock are retained. This stage still uses citizen ranks and
-  direct sales; player crafting experimentation, watch/listen sessions and citizen
-  bazaar listings remain future work. **Requires a server restart; no client update
-  or new launcher binary.** Live performance, physical stock, purchases and clean
-  restart persistence still need in-game acceptance checks.
+  Taren samples real active local resources where available. Lio dances inside
+  the Theed cantina and supports the normal watching system. His earned ranks
+  unlock wound healing, then battle-fatigue healing, then Mind/Focus/Willpower
+  dance buffs. Watch for at least one minute and stop watching to receive earned
+  buffs; his work breaks also end the performance. Watching is free, with an
+  optional 100-credit tip. Stay nearby, in the cantina and out of combat.
+  Qualified doctors provide one-hour buff packages for 2,500 credits and consume
+  crafted supplies. Inspect work and progress through their radial menus.
+  Existing wallets, ranks and completed stock are retained. Citizen ranks, direct
+  sales and bounded crafting remain the current scope; native crafting
+  experimentation and citizen bazaar listings remain future work.
+  **Requires a server restart; no client update or new launcher binary.**
+  Dancing, crafting, purchases and clean restart persistence were confirmed in
+  game for the prior stage; the new watching services await in-game acceptance.
 
 - **Solo entertainer healing crafting:** Slitherhorn [Ent Heal EXP] unlocks at Novice Entertainer and awards **500 base healing XP** for **30 + 15 metal**. Slitherhorn II [Ent Heal EXP] unlocks at either Novice Dancer or Novice Musician and awards **1,000 base healing XP** for **45 + 23 metal**. Existing entertainer XP bonuses apply. These are training props and cannot play music. Requires launcher **1.0.19**, its client update, and the updated server.
 - **Open entertainer buffs:** A player can watch or listen to a player entertainer
