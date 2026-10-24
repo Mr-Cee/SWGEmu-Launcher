@@ -501,3 +501,11 @@ with damage or power** can roll one rarity:
 - **Universal junk dealers:** Every junk dealer buys all junk specialties and non-crafted enemy loot types, including weapons, armor, components, attachments, food, clothing, deeds and resources. Existing junk prices are retained; otherwise eligible loot sells for **100 credits per item or resource stack**, shown in the sale list. Broken and sliced loot is accepted. Protected items, No Trade items and nonempty containers remain excluded. Move items out of bags and equipped slots into the main inventory to sell them. Requires the matching server restart; no client update.
 
 - **Store mounts during combat:** Vehicles and trained creature mounts can be stored while the owner is in combat. Calling them out during combat remains blocked. Normal dismounting and storage cooldowns still apply; ordinary pets and companions retain their combat storage rules. Requires the matching server restart; no additional client update for this change.
+
+### Citizen speeder route correction
+
+Citizens can use outdoor routes that finish within their planned dismount
+range, instead of requiring an exact endpoint. Rook dismounts before his
+mission target and walks the final approach. Incomplete routes beyond that
+range still fall back to walking. Requires a server restart; no client update
+or new launcher download.
