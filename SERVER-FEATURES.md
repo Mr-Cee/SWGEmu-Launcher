@@ -509,3 +509,13 @@ range, instead of requiring an exact endpoint. Rook dismounts before his
 mission target and walks the final approach. Incomplete routes beyond that
 range still fall back to walking. Requires a server restart; no client update
 or new launcher download.
+
+### Rook supplies crafting materials
+
+Rook learns basic Scout, harvests hide, bone or meat from eligible mission kills
+after combat, and carries up to 200 real resource units between trips. After a
+mission he offers Mira up to 32 units at 2 credits each. Her actual wallet and
+storage limits govern purchases; refused stock stays with Rook. Purchased
+materials feed her existing stimpack recipes. His resources and harvest/sales
+counters persist, and his status conversation reports them. Player loot claims
+are respected. Requires a server restart; no client update or launcher download.
