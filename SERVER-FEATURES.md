@@ -13,7 +13,7 @@ launcher and its client updates.
 - **Personal citizen speeders:** Taren, Mira, Sela, Lio and Rook summon their own
   swoop for outdoor destinations **more than 250m away**. Short trips and indoor
   movement stay on foot. They store it near the destination and walk the final
-  approach; Rook dismounts before hunting. Combat interrupts riding. Speeders
+  approach; Rook dismounts before hunting. Combat interrupts riding. Mounting failures fall back to walking. Speeders
   are private bot transport, and existing saved progress is preserved.
   **Requires a server restart; no client update or new launcher binary.**
 
