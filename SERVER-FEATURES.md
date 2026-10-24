@@ -540,3 +540,9 @@ shop. Full storage makes him wait for crafting or purchases to free space.
 **Ask about work, progress, and stock** explains travel, breaks, missing
 materials, full shelves and funding needs across the citizens. Requires a
 server restart only; no client update or launcher download.
+
+### Rook's post-hunt routine
+
+Rook collects nearby eligible mission wildlife between waves when all living mission defenders are cleared and no other active defenders remain. He visits the closest corpse first, keeps player and group claims protected, and resumes fighting when new defenders appear. At Mira, he can sell several resource stacks within one shared 32-unit visit limit. His work report shows the last harvesting and sales outcome, including unavailable corpses, blocked access, training needs, storage limits and purchasing funds.
+
+Requires a server restart; no client update is needed.
