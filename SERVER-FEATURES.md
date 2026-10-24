@@ -546,3 +546,9 @@ server restart only; no client update or launcher download.
 Rook collects nearby eligible mission wildlife between waves when all living mission defenders are cleared and no other active defenders remain. He visits the closest corpse first, keeps player and group claims protected, and resumes fighting when new defenders appear. At Mira, he can sell several resource stacks within one shared 32-unit visit limit. His work report shows the last harvesting and sales outcome, including unavailable corpses, blocked access, training needs, storage limits and purchasing funds.
 
 Requires a server restart; no client update is needed.
+
+### Rook buys and uses combat medicine
+
+Rook buys up to two real stimpacks from Mira for 500 credits each and pays for Novice Medic training. He uses the game's healing rules when Health or Action runs low, including medicine charges, Mind cost and cooldowns. If Health or reserves become critical, or he is hurt and out of usable medicine, he attempts to flee on foot and return for care and supplies. An unfinished mission abandoned during retreat gives no completion reward. His work report shows medicine stock, purchases, treatments and retreat reasons.
+
+Requires a server restart; no client update is needed.
