@@ -10,6 +10,17 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Melee citizen pilot — Rook Talon:** A mortal Brawler starts by the Theed
+  starport Event NPC and trains toward Master Teras Kasi using earned combat XP
+  and native skill costs. He walks to a general mission terminal, takes one native
+  destroy offer at a time under 1,100m away, and hunts its defenders and lair.
+  Mission rewards fund his training; progress survives restarts. He visits the
+  Event NPC for missing doctor/entertainer buffs or wound/fatigue treatment,
+  preserving active buff timers. Defeat abandons the mission and returns him
+  for care. His radial menu reports progress. This pilot uses an NPC mission
+  adapter; autonomous doctor/entertainer visits remain future work.
+  **Requires a server restart; no client update.** Live hunting acceptance pending.
+
 - **Living citizens — Theed pilot:** Four named citizens work, take breaks and
   develop saved citizen professions: a resource worker, medical crafter, doctor
   and entertainer. Their wallets and stock are finite. The resource worker and
