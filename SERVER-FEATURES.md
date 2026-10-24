@@ -18,7 +18,7 @@ launcher and its client updates.
   inorganic** units and stores a finished pack before selling it for 500 credits.
   Ingredient quality and citizen rank affect its stats; buying never rerolls them.
   Taren samples real active local resources where available. Lio dances inside
-  the Theed cantina and supports the normal watching system. His earned ranks
+  the Theed cantina (near -5190, 4258) and supports the normal watching system. His earned ranks
   unlock wound healing, then battle-fatigue healing, then Mind/Focus/Willpower
   dance buffs. Watch for at least one minute and stop watching to receive earned
   buffs; his work breaks also end the performance. Watching is free, with an
