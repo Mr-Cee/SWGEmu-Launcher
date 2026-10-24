@@ -19,7 +19,10 @@ launcher and its client updates.
   preserving active buff timers. Defeat abandons the mission and returns him
   for care. His radial menu reports progress. This pilot uses an NPC mission
   adapter; autonomous doctor/entertainer visits remain future work.
-  **Requires a server restart; no client update.** Live hunting acceptance pending.
+  Rook runs between destinations and prioritizes newly spawned mission defenders.
+  Native mission selection, travel, combat XP, completion rewards and saved progress
+  have been confirmed in server logs. Long-term mastery and defeat recovery still
+  need in-game acceptance. **Server update installed; no client update.**
 
 - **Living citizens — Theed pilot:** Four named citizens work, take breaks and
   develop saved citizen professions: a resource worker, medical crafter, doctor
