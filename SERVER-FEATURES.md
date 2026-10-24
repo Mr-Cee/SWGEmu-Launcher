@@ -10,6 +10,13 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Upgraded entertainer citizen:** Qualified Lio uses exotic dance and flourishes
+  to build full native buffs (up to 125% of base Mind, Focus and Willpower) in about
+  a minute. Keep watching at least a full minute before stopping. He now trains
+  toward expert at 2,400 XP and master at 4,800 XP for faster buff duration and
+  stronger wound/fatigue healing. Saved progress carries forward. Requires a server
+  restart; no client update or new launcher binary.
+
 - **Orange citizen map markers:** Taren, Mira, Sela, Lio and Rook appear orange
   on the radar and overhead map. Player, companion and other NPC colors retain
   their normal behavior. Requires launcher 1.0.24, a client update and the matching
