@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "2026.10.23.23",
-  "minimumLauncherVersion": "1.0.23",
+  "version": "2026.10.24.24",
+  "minimumLauncherVersion": "1.0.24",
   "patches": [
     "center-of-being-icon",
     "free-crafting-skills",
@@ -20,7 +20,8 @@
     "instant-item-destroy",
     "junk-dealer-double-click",
     "entertainer-healing-crafting",
-    "third-toolbar"
+    "third-toolbar",
+    "orange-citizen-map-markers"
   ],
   "notes": "Center of Being timed icon, zero crafting skill point costs, waypoint monitor defaults, and direct galaxy-wide travel, and transportation-map double-click travel, and mounted NPC conversations, and multiple game instances. Adds /lootArea and /harvestArea [hide|bone|meat]; requires matching server update. Launcher updates can now be downloaded and installed in place with Update launcher. All four Force Sensitive trees cost zero skill points; XP and unlock requirements remain. Accepting terminal missions now skips the confirmation prompt; normal server checks still apply. Adds rider attachment support for hired humanoid companions. Requires matching server companion feature. Saved account names now start the game login cursor in the password field; blank accounts retain username focus. Passwords are never stored by the launcher. Relaxed structure placement lets the matching server validate sites instead of the client yellow lot grid. Preview stays at terrain height. All regional building styles work on housing-enabled planets after the server update; protected areas, water and structure overlap remain blocked. Fixes destination double-click at starship terminals: uses native personal ship Travel with the selected ship and group passengers. Adds Sprint to combat master boxes: 50% faster running for 30 seconds, 60-second cooldown from activation. Requires matching server restart. Sprint appears as a learned Combat ability and uses the Burst Run icon in the ability list and toolbar. Inventory item destruction now skips the confirmation window. The matching server adds Prevent Destroy / Unlock Item to inventory item radial menus; protected items and bags containing them cannot be destroyed, traded or sold. Protected items can still be placed in houses. Server restart required for protection. Fixes junk dealer list double-click in the supported pre-CU client. Double-clicking an actual item presses the normal single-item Sell action. Blank space, other lists and Sell All are unaffected. Requires the matching server window marker and restart. Adds non-playable Slitherhorn [Ent Heal EXP] crafting at Novice Entertainer (500 base healing XP, 30+15 metal) and Slitherhorn II at either Novice Dancer or Novice Musician (1,000 base healing XP, 45+23 metal). Existing XP bonuses apply. Requires matching server restart. Adds a third 12-slot toolbar row beneath the stock second row for mouse-clicked abilities and macros. Existing toolbar panes are migrated from 24 to 36 slots. Slots 24-35 intentionally have no /ui action toolbarSlot## bindings."
 }
