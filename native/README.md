@@ -47,11 +47,11 @@ Version 1.7 implements junk dealer double-clicks explicitly. The supported clien
 
 Version 1.8 expands the stock toolbar's eight saved panes from 24 to 36 items after settings load and enlarges the existing slot/background volume pages for a third 12-slot row. The first 24 entries are preserved, while the native toolbar continues to own drag/drop, mouse clicks, macro and ability execution, and settings persistence. A guarded save hook refuses to write a transient truncated pane shape. The extension does not register `toolbarSlot24` through `toolbarSlot35`, so the added slots have no `/ui action toolbarSlot##` path. Exact load/save, settings, string and widget signatures are checked before the two hooks install atomically. Tests cover pane-shape detection, generated settings keys, row dimensions and the absence of action registration. Live positioning and mouse activation still require in-game verification.
 
-Version 1.9 colors the five autonomous citizens orange (#FFA500) on the ground
+Version 1.10 colors the five autonomous citizens purple (#CC55FF) on the ground
 radar and overhead map. A presentation-only bit (0x40000000) in outgoing PvP
 status messages identifies citizens; it is not stored in server combat flags.
 Exact call-site signatures guard the two color overrides and the ground radar's
 invulnerable-NPC visibility gate. The native object classification, combat flags,
 range, brackets and other objects remain native. The color override applies to
 living NPC-white objects; corpse/group/target colors remain native. No general
-color table is modified. Requires launcher 1.0.24 and the matching server restart.
+color table is modified. Requires launcher 1.0.25 and the matching server restart.

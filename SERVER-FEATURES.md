@@ -24,9 +24,9 @@ launcher and its client updates.
   stronger wound/fatigue healing. Saved progress carries forward. Requires a server
   restart; no client update or new launcher binary.
 
-- **Orange citizen map markers:** Taren, Mira, Sela, Lio and Rook appear orange
+- **Purple citizen map markers:** Taren, Mira, Sela, Lio and Rook appear purple
   on the radar and overhead map. Player, companion and other NPC colors retain
-  their normal behavior. Requires launcher 1.0.24, a client update and the matching
+  their normal behavior. Requires launcher 1.0.25, a client update and the matching
   server restart. Close all game windows before updating; restart the game afterward.
 
 - **Personal citizen speeders:** Taren, Mira, Sela, Lio and Rook summon their own

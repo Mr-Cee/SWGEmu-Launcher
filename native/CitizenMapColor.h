@@ -1,6 +1,6 @@
 // Presentation-only server marker carried by UpdatePVPStatusMessage.
 constexpr uint32_t citizenMapMarker=0x40000000u;
-static const uint32_t citizenOrange=0xff00a5ffu; // native UIColor bytes R,G,B,A
+static const uint32_t citizenPurple=0xffff55ccu; // native UIColor bytes R,G,B,A
 using MapPvpFlags=uint32_t(__thiscall*)(const void*);
 using MapTypeColor=const uint32_t*(__cdecl*)(int);
 using MapObjectColor=const uint32_t*(__cdecl*)(const void*,bool);
@@ -14,12 +14,12 @@ static bool HasCitizenMapMarker(const void* object){
 }
 static const uint32_t* __cdecl CitizenRadarColor(int type,const void* object){
  // Keep dead and group colors; target brackets use their separate native path.
- if(type==4&&HasCitizenMapMarker(object))return &citizenOrange;
+ if(type==4&&HasCitizenMapMarker(object))return &citizenPurple;
  return nativeMapTypeColor(type);
 }
 static const uint32_t* __cdecl CitizenOverheadColor(const void* object,bool ignoreTarget){
  const uint32_t* normal=nativeMapObjectColor(object,ignoreTarget);
- if(normal&&*normal==0xffffffffu&&HasCitizenMapMarker(object))return &citizenOrange;
+ if(normal&&*normal==0xffffffffu&&HasCitizenMapMarker(object))return &citizenPurple;
  return normal;
 }
 static uint32_t __cdecl CitizenRadarVisibility(const void* object){
