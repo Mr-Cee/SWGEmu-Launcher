@@ -10,6 +10,13 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Citizen doctor and care visits:** Sela treats physical wounds for 100 credits
+  and sells medical buffs for 2,500 credits, consuming medical stock crafted by Mira.
+  Treatments train Sela toward expert/master, improving buffs from +2,000 for one
+  hour to +3,000 for two hours. Rook pays Sela and visits Lio for performance care;
+  the Event NPC remains a fallback. Existing progress is preserved. Server restart
+  required; no client update or new launcher binary.
+
 - **Upgraded entertainer citizen:** Qualified Lio uses exotic dance and flourishes
   to build full native buffs (up to 125% of base Mind, Focus and Willpower) in about
   a minute. Keep watching at least a full minute before stopping. He now trains
