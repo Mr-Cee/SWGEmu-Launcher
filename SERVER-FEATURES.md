@@ -530,3 +530,13 @@ units for 24 credits, retaining their actual quality. Stock is finite and shared
 with the workshop; 32 organic and 32 inorganic units stay reserved for crafting.
 Purchases pay Taren's saved wallet from your cash, then bank. Requires a server
 restart only; no client update or launcher download.
+
+### Citizens respond to workshop demand
+
+Taren now gathers the ingredient Mira needs first, accounting for supplies
+already delivered by Rook or sold by players. He prioritizes a complete batch
+for the next pack, builds a small workshop buffer, then restocks his resource
+shop. Full storage makes him wait for crafting or purchases to free space.
+**Ask about work, progress, and stock** explains travel, breaks, missing
+materials, full shelves and funding needs across the citizens. Requires a
+server restart only; no client update or launcher download.
