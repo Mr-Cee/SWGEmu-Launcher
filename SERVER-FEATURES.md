@@ -1,6 +1,6 @@
 # Server features and changes
 
-Updated October 23, 2026.
+Updated October 24, 2026.
 
 A player-friendly overview of the customizations implemented for this private
 SWGEmu server. Values below describe the current configured rules. Newer server
@@ -9,6 +9,13 @@ some in-game checks are still pending. Client features require the current
 launcher and its client updates.
 
 ## Characters, skills, and experience
+
+- **Personal citizen speeders:** Taren, Mira, Sela, Lio and Rook summon their own
+  swoop for outdoor destinations **more than 250m away**. Short trips and indoor
+  movement stay on foot. They store it near the destination and walk the final
+  approach; Rook dismounts before hunting. Combat interrupts riding. Speeders
+  are private bot transport, and existing saved progress is preserved.
+  **Requires a server restart; no client update or new launcher binary.**
 
 - **Melee citizen pilot — Rook Talon:** A mortal Brawler starts by the Theed
   starport Event NPC and trains toward Master Teras Kasi using earned combat XP
@@ -19,7 +26,8 @@ launcher and its client updates.
   preserving active buff timers. Defeat abandons the mission and returns him
   for care. His radial menu reports progress. This pilot uses an NPC mission
   adapter; autonomous doctor/entertainer visits remain future work.
-  Rook runs between destinations and prioritizes newly spawned mission defenders.
+  Rook uses a speeder for long outdoor trips, walks the final approach, and
+  prioritizes newly spawned mission defenders.
   Native mission selection, travel, combat XP, completion rewards and saved progress
   have been confirmed in server logs. Long-term mastery and defeat recovery still
   need in-game acceptance. **Server update installed; no client update.**
