@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include "CitizenMapColorTests.h"
 static int nativeCalls,forwarded,closed;static std::wstring received;static uint32_t receivedCommand;static const void* receivedTarget;static int terminal;
 static uint32_t __cdecl FakeQueue(uint32_t command,const void* target,const NativeWide* text,int,int){nativeCalls++;receivedCommand=command;receivedTarget=target;received.assign(text->first,text->last);return 1;}
 static void __fastcall FakeClose(void*,void*);
@@ -117,6 +118,7 @@ int main(){
  assert(*(long*)(slots+0xa8)==116&&fakeSlotSize[0]==412&&fakeSlotSize[1]==116&&fakeBackgroundSize[0]==500&&fakeBackgroundSize[1]==98&&fakeToolbarUpdates==1);
  std::cout<<"PASS: third toolbar detects 24/36-slot panes, writes eight 36-slot settings, and expands both native UI rows without command-action registration.\n";
  TestJunkDoubleClick();
+ TestCitizenMapColor();
  auto create=Proc("DirectInput8Create");assert(create!=nullptr); // unsupported test host must leave system input available
  std::cout<<"PASS: native single/double-click routing, destination membership, direct marker, debounce, ordinary ticket preservation, and unsupported-host input forwarding.\n";
 }

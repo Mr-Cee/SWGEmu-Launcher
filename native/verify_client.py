@@ -12,3 +12,7 @@ for offset,expected in [(0xd3a610,'83ec1c53558b6c24285657558bf1'),(0xd3a500,'515
  assert data[offset:offset+len(bytes.fromhex(expected))]==bytes.fromhex(expected)
 assert struct.unpack_from('<I',data,0x11fb378)[0]==0x113a610
 print('PASS: exact supported executable hash, PE architecture/image size, and all native hook signatures.')
+
+for offset,expected in [(0xbfe0f6,'53e8c43998ff8b10538955f4'),(0xbfe0bb,'8b4df08b918c030000c1ea08f6c201'),(0x2de7ce,'6a0157e8ba322a000fb608'),(0x581ac0,'558beca0dc27930184c0'),(0x581a90,'558beca0dc27930184c0')]:
+ assert data[offset:offset+len(bytes.fromhex(expected))]==bytes.fromhex(expected)
+print('PASS: supported ground radar, invulnerability visibility gate and overhead map call sites.')

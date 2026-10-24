@@ -10,6 +10,11 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Orange citizen map markers:** Taren, Mira, Sela, Lio and Rook appear orange
+  on the radar and overhead map. Player, companion and other NPC colors retain
+  their normal behavior. Requires launcher 1.0.24, a client update and the matching
+  server restart. Close all game windows before updating; restart the game afterward.
+
 - **Personal citizen speeders:** Taren, Mira, Sela, Lio and Rook summon their own
   swoop for outdoor destinations **more than 250m away**. Short trips and indoor
   movement stay on foot. They store it near the destination and walk the final
