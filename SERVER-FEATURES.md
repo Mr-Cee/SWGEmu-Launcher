@@ -13,15 +13,19 @@ launcher and its client updates.
 - **Living citizens — Theed pilot:** Four named citizens work, take breaks and
   develop saved citizen professions: a resource worker, medical crafter, doctor
   and entertainer. Their wallets and stock are finite. The resource worker and
-  crafter can buy selected mineral/organic resources from players (100 units for
-  200 credits); the crafter sells real crafted Stimpack A packs for 500 credits.
+  crafter can buy selected organic/inorganic resources from players (100 units for
+  200 credits). Mira now consumes the native Stimpack A recipe's **8 organic + 8
+  inorganic** units and stores a finished pack before selling it for 500 credits.
+  Ingredient quality and citizen rank affect its stats; buying never rerolls them.
+  Taren samples real active local resources where available. Lio visibly performs
+  the game's continuous Basic dance while working and stops before walking away.
   Qualified doctors and entertainers provide the existing one-hour buff packages
   for 2,500 credits, paid into their own wallets; doctors consume crafted supplies.
-  Inspect work and progress through their radial menus. This first version uses
-  simplified gathering, citizen ranks and medical recipes, with direct NPC sales;
-  full player professions, native performance sessions and citizen bazaar listings
-  are future work. **Requires a server restart; no client update or new launcher
-  binary.** Configured for the next restart; live routes, purchases, services and
+  Inspect work and progress through their radial menus. Existing wallets, ranks
+  and completed pilot stock are retained. This stage still uses citizen ranks and
+  direct sales; player crafting experimentation, watch/listen sessions and citizen
+  bazaar listings remain future work. **Requires a server restart; no client update
+  or new launcher binary.** Live performance, physical stock, purchases and clean
   restart persistence still need in-game acceptance checks.
 
 - **Solo entertainer healing crafting:** Slitherhorn [Ent Heal EXP] unlocks at Novice Entertainer and awards **500 base healing XP** for **30 + 15 metal**. Slitherhorn II [Ent Heal EXP] unlocks at either Novice Dancer or Novice Musician and awards **1,000 base healing XP** for **45 + 23 metal**. Existing entertainer XP bonuses apply. These are training props and cannot play music. Requires launcher **1.0.19**, its client update, and the updated server.
