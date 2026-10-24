@@ -10,6 +10,20 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Living citizens — Theed pilot:** Four named citizens work, take breaks and
+  develop saved citizen professions: a resource worker, medical crafter, doctor
+  and entertainer. Their wallets and stock are finite. The resource worker and
+  crafter can buy selected mineral/organic resources from players (100 units for
+  200 credits); the crafter sells real crafted Stimpack A packs for 500 credits.
+  Qualified doctors and entertainers provide the existing one-hour buff packages
+  for 2,500 credits, paid into their own wallets; doctors consume crafted supplies.
+  Inspect work and progress through their radial menus. This first version uses
+  simplified gathering, citizen ranks and medical recipes, with direct NPC sales;
+  full player professions, native performance sessions and citizen bazaar listings
+  are future work. **Requires a server restart; no client update or new launcher
+  binary.** Configured for the next restart; live routes, purchases, services and
+  restart persistence still need in-game acceptance checks.
+
 - **Solo entertainer healing crafting:** Slitherhorn [Ent Heal EXP] unlocks at Novice Entertainer and awards **500 base healing XP** for **30 + 15 metal**. Slitherhorn II [Ent Heal EXP] unlocks at either Novice Dancer or Novice Musician and awards **1,000 base healing XP** for **45 + 23 metal**. Existing entertainer XP bonuses apply. These are training props and cannot play music. Requires launcher **1.0.19**, its client update, and the updated server.
 - **Open entertainer buffs:** A player can watch or listen to a player entertainer
   without joining their group or using `/setperformancebufftarget`. After at least
