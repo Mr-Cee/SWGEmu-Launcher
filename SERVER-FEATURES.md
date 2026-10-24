@@ -552,3 +552,11 @@ Requires a server restart; no client update is needed.
 Rook buys up to two real stimpacks from Mira for 500 credits each and pays for Novice Medic training. He uses the game's healing rules when Health or Action runs low, including medicine charges, Mind cost and cooldowns. If Health or reserves become critical, or he is hurt and out of usable medicine, he attempts to flee on foot and return for care and supplies. An unfinished mission abandoned during retreat gives no completion reward. His work report shows medicine stock, purchases, treatments and retreat reasons.
 
 Requires a server restart; no client update is needed.
+
+### Mira's medical crafting progression
+
+Mira now earns saved medical crafting XP from successful production and pays native XP and credit costs for Medic crafting skills. She unlocks Stimpack B at Medicine Crafting II and C at IV. Advanced packs use real water, chemicals and crafted medical components; Taren gathers for the next recipe stage when suitable local resources and storage are available. Starter packs have production priority, and finished medicine stock remains limited to 12.
+
+Use **Browse Mira medical stock** to choose a real A/B/C pack and see its power, charges, medicine-use requirement and price (500/1000/1500 credits). Rook buys the strongest affordable pack his medicine skills allow. Existing items, credits and pilot progress are preserved; native crafting XP starts with new successful work. Citizen bazaar listings are a later phase; purchases currently use Mira's direct shop.
+
+Requires a server restart; no client update is needed.
