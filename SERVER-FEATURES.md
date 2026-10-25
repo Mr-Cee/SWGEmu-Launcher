@@ -10,6 +10,15 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Weaponsmith citizen:** Dax Venn works near Mira in Theed (-4907, 4050),
+  buys real ingredient deliveries from Taren, and earns crafting XP toward native
+  Weaponsmith training. He starts with CDEF rifles and can unlock vibro knucklers
+  and DLT20 rifles with real components. Players can buy actual crafted weapons
+  directly or through his limited bazaar stock; sale proceeds fund his wallet.
+  Stock and progression persist. Automatic combat-bot equipment shopping and an
+  armorsmith are subsequent additions. Server restart required; no client update
+  or new launcher binary.
+
 - **Citizen doctor and care visits:** Sela treats physical wounds for 100 credits
   and sells medical buffs for 2,500 credits, consuming medical stock crafted by Mira.
   Treatments train Sela toward expert/master, improving buffs from +2,000 for one
