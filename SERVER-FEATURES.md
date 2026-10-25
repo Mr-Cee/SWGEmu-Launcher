@@ -656,3 +656,11 @@ Requires a server restart; no client update is needed.
 Players can no longer attack or damage Rook or Jace through normal combat. Player-controlled pets, hired companions and owned installations cannot bypass the protection. The hunters remain vulnerable to mission enemies and wildlife, preserving their healing, retreat and progression routines. Their purple markers and service conversations remain available.
 
 Requires a server restart; no client update is needed.
+
+### Smiths budget for training and paid work
+
+Dax and Kira now reserve their next native training fee plus 500 operating credits when buying ingredients for practice or speculative stock. Active, affordable hunter requests and their required components may use training savings while still preserving the 500-credit operating balance; these remain cash-on-collection requests, not guaranteed sales. Skill training and new bazaar listing fees also preserve operating cash. Existing stock can still be sold directly or collected from existing bazaar listings.
+
+Ask either smith about work to see their next training reserve, available speculative ingredient budget, and the additional sales income needed to restore reserves. Practice pauses when funds are short and resumes after real sales provide enough money. No credits or artificial purchases are created.
+
+Requires a server restart; no client update is needed.
