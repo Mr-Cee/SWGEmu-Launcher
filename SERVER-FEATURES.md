@@ -664,3 +664,11 @@ Dax and Kira now reserve their next native training fee plus 500 operating credi
 Ask either smith about work to see their next training reserve, available speculative ingredient budget, and the additional sales income needed to restore reserves. Practice pauses when funds are short and resumes after real sales provide enough money. No credits or artificial purchases are created.
 
 Requires a server restart; no client update is needed.
+
+### Hunters retire and sell spare equipment
+
+Rook and Jace keep their equipped purchased gear and one usable spare for each weapon/armor slot. They can equip a retained spare when selected gear breaks, and visit qualified smiths to repair worthwhile worn backups using the existing paid service and real repair supplies.
+
+Between missions, they take surplus purchased equipment to a nearby Theed bazaar. Used prices are 60% of the workshop price, scaled by the item's remaining condition. Each hunter pays the 20-credit listing fee, preserves his existing care/training reserve, and posts at most three items. These are the original items with their maker, serial, properties and wear intact. Buy and collect them through the normal bazaar flow; net proceeds reach the hunter through saved receipts. Unsold items return after 24 hours and wait another day before relisting. Broken or exhausted retired pieces are discarded without creating credits or materials. Equipped gear, retained backups, issued starter weapons and unrelated inventory are protected.
+
+Ask the hunter about work to see retained spare slots and secondhand listings. Requires a server restart; no client update is needed.
