@@ -10,6 +10,15 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Armorsmith citizen:** Kira Dorn works near Mira in Theed (-4909, 4058).
+  She earns native crafting XP and pays for Artisan/Armorsmith prerequisites,
+  starting with crafting tools and unlocking bone boots, gloves and chest plates.
+  Armor uses real bone segments, fiberplast panels and raw materials. She buys
+  needed supplies from samplers, Taren and returning combat hunters. Players can
+  buy actual crafted stock directly or on the bazaar; armor stock shows protection
+  and encumbrance. Combat-bot equipment shopping/equipping is a later addition.
+  Server restart required; no client update or new launcher binary.
+
 - **Dedicated artisan hand samplers:** Nera Sol, Venn Korr and Tali Senn gather
   minerals, chemicals and water around Theed. They use real deposits, matching
   survey tools, sampling rolls/action costs and paid native survey training.
