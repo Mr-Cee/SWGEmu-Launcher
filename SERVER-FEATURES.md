@@ -13,7 +13,8 @@ launcher and its client updates.
 - **Dedicated artisan hand samplers:** Nera Sol, Venn Korr and Tali Senn gather
   minerals, chemicals and water around Theed. They use real deposits, matching
   survey tools, sampling rolls/action costs and paid native survey training.
-  They retain their kneeling posture while safely sampling.
+  They retain their kneeling posture while safely sampling and skip sites that
+  can only yield trace amounts at their current skill.
   They return limited batches to Dax, Mira or Taren for payment; full storage or
   insufficient buyer funds makes them wait. Each has separate saved credits,
   training and actual carried resources. Purple markers and existing speeder
