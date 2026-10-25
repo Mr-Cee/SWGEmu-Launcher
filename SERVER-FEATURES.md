@@ -10,6 +10,18 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Combat citizen equipment maintenance:** Between missions, Rook and Jace
+  check purchased weapons and armor at 40% remaining condition. They seek a
+  qualified smith with a real repair tool for a 150-credit attempt when repair
+  prospects are worthwhile, preserving their care/training reserve. Native
+  repair failure and permanent maximum-condition loss apply. Otherwise they
+  request fresh equivalent replacements. Dax and Kira can craft native five-use
+  repair tools once unlocked and sell them directly for 600 credits. Purchased
+  hunter weapons now receive normal weapon wear; status conversations show gear
+  condition. Existing starter weapons and other NPCs keep their current rules.
+  Services depend on unlocked stock and smith skill. Server restart required;
+  no client update.
+
 - **Smith apprentices can practice:** Dax and Kira no longer need to sell every
   starter item before gaining more apprenticeship XP. When sale-stock targets
   are met, they can use native practice crafting: real ingredients are consumed,
