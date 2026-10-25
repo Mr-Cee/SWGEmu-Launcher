@@ -576,3 +576,9 @@ Jace Vale now starts near the Theed starport as a Marksman with a basic CDEF rif
 Jace has separate credits, skills, missions, medicine and resource stock from Rook. Rook's saved progress is preserved. Ask Jace about hunting, training and buffs to see his activity and progress. Better weapon purchases are a future addition; he currently uses the issued starter rifle.
 
 Requires a server restart; no client update is needed.
+
+### Combat citizens are protected from player attacks
+
+Players can no longer attack or damage Rook or Jace through normal combat. Player-controlled pets, hired companions and owned installations cannot bypass the protection. The hunters remain vulnerable to mission enemies and wildlife, preserving their healing, retreat and progression routines. Their purple markers and service conversations remain available.
+
+Requires a server restart; no client update is needed.
