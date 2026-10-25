@@ -557,6 +557,14 @@ Requires a server restart; no client update is needed.
 
 Mira now earns saved medical crafting XP from successful production and pays native XP and credit costs for Medic crafting skills. She unlocks Stimpack B at Medicine Crafting II and C at IV. Advanced packs use real water, chemicals and crafted medical components; Taren gathers for the next recipe stage when suitable local resources and storage are available. Starter packs have production priority, and finished medicine stock remains limited to 12.
 
-Use **Browse Mira medical stock** to choose a real A/B/C pack and see its power, charges, medicine-use requirement and price (500/1000/1500 credits). Rook buys the strongest affordable pack his medicine skills allow. Existing items, credits and pilot progress are preserved; native crafting XP starts with new successful work. Citizen bazaar listings are a later phase; purchases currently use Mira's direct shop.
+Use **Browse Mira medical stock** to choose a real A/B/C pack and see its power, charges, medicine-use requirement and price (500/1000/1500 credits). Rook buys the strongest affordable pack his medicine skills allow. Existing items, credits and pilot progress are preserved; native crafting XP starts with new successful work. Mira's direct shop remains available alongside the citizen bazaar listings described below.
+
+Requires a server restart; no client update is needed.
+
+### Mira sells surplus medicine on the bazaar
+
+Mira now posts up to three real surplus medical packs on a nearby Theed bazaar. Listed packs leave her direct shop until sold or returned, preserving their original properties. She keeps four starter packs available directly and pays the normal 20-credit listing fee from her own wallet. Bazaar prices are A 570, B 1120 and C 1670 credits, covering the direct price, listing fee and a 10% convenience margin.
+
+Buy and collect these through the normal bazaar flow. Sales pay Mira's wallet, less any native city sales tax. Unsold packs return after the 24-hour listing expires; published listing fees are retained. Existing player listings and generated market stock keep their normal behavior. Listed stock persists through clean server restarts.
 
 Requires a server restart; no client update is needed.
