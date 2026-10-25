@@ -10,6 +10,14 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Dedicated artisan hand samplers:** Nera Sol, Venn Korr and Tali Senn gather
+  minerals, chemicals and water around Theed. They use real deposits, matching
+  survey tools, sampling rolls/action costs and paid native survey training.
+  They return limited batches to Dax, Mira or Taren for payment; full storage or
+  insufficient buyer funds makes them wait. Each has separate saved credits,
+  training and actual carried resources. Purple markers and existing speeder
+  travel apply. Server restart required; no client update or new launcher binary.
+
 - **Weaponsmith citizen:** Dax Venn works near Mira in Theed (-4907, 4050),
   buys real ingredient deliveries from Taren, and earns crafting XP toward native
   Weaponsmith training. He starts with CDEF rifles and can unlock vibro knucklers
