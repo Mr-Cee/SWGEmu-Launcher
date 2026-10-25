@@ -10,6 +10,18 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Combat citizen equipment shopping:** Between missions, Rook and Jace visit
+  Dax and Kira for usable upgrades from their actual direct-sale stock. Rook buys
+  unarmed weapons and Jace rifles, checking native certifications and damage per
+  second; both can buy bone armor with better combined kinetic/energy protection and manageable
+  encumbrance. Purchases move the actual crafted item and pay the smith from the
+  hunter's saved wallet. They retain at least 8,000 credits (more when future
+  training fees require it), keep replaced gear, and skip shopping when no
+  affordable upgrade is available. Owned gear has saved identities and is
+  restored when the citizen spawns. Worn armor uses native location-specific
+  protection and condition wear in combat. Requires a server restart; no client
+  update. Live purchases depend on the smiths unlocking and stocking upgrades.
+
 - **Armorsmith citizen:** Kira Dorn works near Mira in Theed (-4909, 4058).
   She earns native crafting XP and pays for Artisan/Armorsmith prerequisites,
   starting with crafting tools and unlocking bone boots, gloves and chest plates.
