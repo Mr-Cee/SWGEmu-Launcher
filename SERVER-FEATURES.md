@@ -10,6 +10,16 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Storage-equipped droids:** Niko can craft an MSE deed with an installed Item
+  Storage Module I, once his native skills and real ingredients allow it. The
+  actual module becomes part of the deed and transfers into the droid on normal
+  unpacking, providing native item storage. It is distinct from plain MSE deeds,
+  costs 3400 credits directly, and surplus can appear on the bazaar with normal
+  fees. Examine the deed for its storage rating. No skills, modules or stock are
+  granted. Server restart required; no client update. Live purchase and unpack
+  verification remains pending.
+
+
 - **Dedicated gas sampler:** Orin Vale starts near the other Theed samplers and
   gathers real active gas deposits, favoring inert gas for electronics and droid
   recipes. He earns surveying XP, pays native Artisan training fees, uses his
