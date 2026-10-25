@@ -568,3 +568,11 @@ Mira now posts up to three real surplus medical packs on a nearby Theed bazaar. 
 Buy and collect these through the normal bazaar flow. Sales pay Mira's wallet, less any native city sales tax. Unsold packs return after the 24-hour listing expires; published listing fees are retained. Existing player listings and generated market stock keep their normal behavior. Listed stock persists through clean server restarts.
 
 Requires a server restart; no client update is needed.
+
+### Jace Vale: ranged combat citizen
+
+Jace Vale now starts near the Theed starport as a Marksman with a basic CDEF rifle and works toward Master Rifleman using earned native XP and paid skill training. He takes one nearby terminal mission at a time, fights with native rifle range and attacks, seeks buffs and care, buys Mira's medicine, harvests eligible mission wildlife and sells resources. He also uses a speeder for longer outdoor trips and the existing purple map/radar marker.
+
+Jace has separate credits, skills, missions, medicine and resource stock from Rook. Rook's saved progress is preserved. Ask Jace about hunting, training and buffs to see his activity and progress. Better weapon purchases are a future addition; he currently uses the issued starter rifle.
+
+Requires a server restart; no client update is needed.
