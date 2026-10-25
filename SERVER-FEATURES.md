@@ -10,6 +10,18 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Citizen crafting orders and smith surplus:** Rook and Jace place persistent
+  requests for needed equipment, backed by their current funds above their care
+  and training reserve. Dax and Kira prioritize unlocked requested recipes and
+  their required components; matching shortages guide samplers. Orders expire
+  after 30 minutes and are paid only when an actual usable item is collected.
+  Ask a smith about work to see requests and the next training requirement.
+  Smiths list excess stock on the bazaar, now up to six listings each and two new
+  listings per product, while retaining copies for active requests. Real native
+  XP, recipe unlocks, materials, fees and stock limits still apply; starter sales
+  can still be needed for training. Existing listings remain valid. Requires a
+  server restart; no client update.
+
 - **Combat citizen equipment shopping:** Between missions, Rook and Jace visit
   Dax and Kira for usable upgrades from their actual direct-sale stock. Rook buys
   unarmed weapons and Jace rifles, checking native certifications and damage per
