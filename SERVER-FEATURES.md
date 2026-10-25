@@ -1,6 +1,6 @@
 # Server features and changes
 
-Updated October 24, 2026.
+Updated October 25, 2026.
 
 A player-friendly overview of the customizations implemented for this private
 SWGEmu server. Values below describe the current configured rules. Newer server
@@ -9,6 +9,16 @@ some in-game checks are still pending. Client features require the current
 launcher and its client updates.
 
 ## Characters, skills, and experience
+
+- **Smith apprentices can practice:** Dax and Kira no longer need to sell every
+  starter item before gaining more apprenticeship XP. When sale-stock targets
+  are met, they can use native practice crafting: real ingredients are consumed,
+  native practice XP is earned, and no sale item is produced. Practice preserves
+  the next training fee plus 500 operating credits, respects recipe unlocks and
+  work schedules, and stops at Novice Weaponsmith/Armorsmith. Existing stock and
+  bazaar listings stay intact. Later training still needs real sales and funds.
+  Work status shows practice counts and XP. Server restart required; no client
+  update.
 
 - **Citizen crafting orders and smith surplus:** Rook and Jace place persistent
   requests for needed equipment, backed by their current funds above their care
