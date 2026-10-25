@@ -10,6 +10,15 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Dedicated gas sampler:** Orin Vale starts near the other Theed samplers and
+  gathers real active gas deposits, favoring inert gas for electronics and droid
+  recipes. He earns surveying XP, pays native Artisan training fees, uses his
+  speeder for trips over 250 meters, and sells actual batches for 2 credits per
+  unit to funded buyers, including Cale and Niko. His wallet, samples, tool and
+  training persist. Supply depends on productive local deposits and buyer demand.
+  Server restart required; no client update.
+
+
 - **Combat citizen equipment maintenance:** Between missions, Rook and Jace
   check purchased weapons and armor at 40% remaining condition. They seek a
   qualified smith with a real repair tool for a 150-credit attempt when repair
