@@ -10,6 +10,16 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Second mineral supplier:** Bren Tal joins the Theed samplers, prioritizing
+  mineral deposits useful to Niko and Cale when they can fund a normal batch.
+  He gives those two workshops first choice and alternates preference after
+  successful deliveries, with other workshops as fallback buyers. He gathers
+  real resources, earns surveying XP, pays native training fees and receives
+  2 credits per delivered unit. His wallet, tool, samples, progress and customer
+  preference persist separately. Existing sampler roles and buyer priorities
+  remain intact. Server restart required; no client update.
+
+
 - **Electronics supply chain:** Cale brings useful self-sampled batches back to
   his workshop and can consume them in crafting, without buying his own samples
   or receiving duplicate XP. Ready crafting work and useful full sample batches
