@@ -10,6 +10,17 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Electronics supply chain:** Cale brings useful self-sampled batches back to
+  his workshop and can consume them in crafting, without buying his own samples
+  or receiving duplicate XP. Ready crafting work and useful full sample batches
+  take precedence over another surveying trip. Niko's currently funded component
+  requests are prioritized once Cale has the native recipe unlocks; direct sales
+  still transfer original components and actual wallet credits. Work status shows
+  retained sample totals and current requests. Existing records migrate without
+  resetting progress. Server restart required; no client update. Advanced droid
+  production and player purchase/unpack still depend on earned skills and stock.
+
+
 - **Crafter wholesale income:** Dax, Kira, Niko and Cale can physically visit an
   existing outdoor junk dealer to sell actual surplus workshop goods. Each
   product keeps at least one player-sale copy; funded hunter orders and current
