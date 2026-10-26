@@ -10,6 +10,19 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Crafter wholesale income:** Dax, Kira, Niko and Cale can physically visit an
+  existing outdoor junk dealer to sell actual surplus workshop goods. Each
+  product keeps at least one player-sale copy; funded hunter orders and current
+  electronics requests are protected. At most half of on-hand copies qualify,
+  with two items per trip, a ten-minute cooldown and 1000 gross credits per hour
+  per crafter. Payout is 40% of direct price, capped at 500 per item and reduced
+  for condition. Listed stock, deeds, raw materials and hunter gear are excluded.
+  Below their training budget, crafters can use working funds to make profitable
+  unlocked basic goods while keeping 500 credits. Status shows dealer earnings.
+  Normal player junk sales are unchanged. Server restart required; no client
+  update.
+
+
 - **Larger crafting resource reserves:** Taren, Mira, Dax, Kira, Niko and Cale
   now have workshop room for 400 units of each distinct resource, with 4000 raw
   units total. Crafters request refills for the raw ingredient types of their
