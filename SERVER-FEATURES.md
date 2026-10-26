@@ -10,6 +10,15 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Droid engineer travel recovery:** Niko now stands before safe foot travel
+  between his workshop and break spot. Route changes clear stale paths and move
+  his idle recovery point to the destination; valid routes continue without
+  being rebuilt every heartbeat. This fixes a sitting NPC indefinitely waiting
+  to reach his break. Crafting still requires workshop arrival, normal skills,
+  ingredients and funds. Applied through screenplay reload; no server restart
+  or client update required on this running server.
+
+
 - **Storage-equipped droids:** Niko can craft an MSE deed with an installed Item
   Storage Module I, once his native skills and real ingredients allow it. The
   actual module becomes part of the deed and transfers into the droid on normal
