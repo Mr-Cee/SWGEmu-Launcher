@@ -10,6 +10,18 @@ launcher and its client updates.
 
 ## Characters, skills, and experience
 
+- **Larger crafting resource reserves:** Taren, Mira, Dax, Kira, Niko and Cale
+  now have workshop room for 400 units of each distinct resource, with 4000 raw
+  units total. Crafters request refills for the raw ingredient types of their
+  current production/practice recipe before running out, aiming for 400 usable
+  units per recipe type. Actual shortages take priority. Native samplers,
+  Taren deliveries and hunter sales use the larger storage limits. Purchases
+  still require real stock and available credits; smith/engineer training
+  reserves remain protected. No materials are granted. Gathering bags and
+  finished-stock limits stay as configured. Server restart required; no client
+  update.
+
+
 - **Droid engineer travel recovery:** Niko now stands before safe foot travel
   between his workshop and break spot. Route changes clear stale paths and move
   his idle recovery point to the destination; valid routes continue without
